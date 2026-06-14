@@ -106,7 +106,14 @@ class PurchaseService
             ]);
 
             // Fiscal receipt on every successful charge (ТЗ §5.5).
-            $this->fiscal->issue($order->fresh(), $payment);
+            $receipt = $this->fiscal->issue($order->fresh(), $payment);
+
+            \App\Models\AuditLog::record('payment', 'payment.succeeded',
+                "Payment of {$order->amount} {$order->currency} for order {$order->gateway_reference}", $payment);
+            \App\Models\AuditLog::record('receipt', 'receipt.issued',
+                "Fiscal receipt {$receipt->fiscal_number} issued", $receipt);
+            \App\Models\AuditLog::record('license', 'license.issued',
+                "License {$license->key} issued for {$order->plan->product->name}", $license);
 
             return $order->fresh();
         });

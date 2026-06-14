@@ -81,6 +81,9 @@ export function AppHeader({ user }) {
                     </span>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+                    {user?.is_admin ? (
+                        <Link href={route('admin.dashboard')} style={{ fontSize: 'var(--fs-body-sm)', color: 'var(--text-accent)', fontWeight: 500 }}>Admin</Link>
+                    ) : null}
                     <span style={{ fontSize: 'var(--fs-body-sm)', color: 'var(--text-muted)' }}>{user?.email}</span>
                     <span style={{ width: 30, height: 30, borderRadius: 'var(--radius-full)', background: 'var(--ink-800)',
                         color: '#fff', display: 'inline-flex', alignItems: 'center', justifyContent: 'center',

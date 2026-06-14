@@ -166,8 +166,9 @@ class DatabaseSeeder extends Seeder
         $full = \Illuminate\Support\Facades\Storage::disk('local')->path($relPath);
         $dir = dirname($full);
         if (! is_dir($dir)) {
-            mkdir($dir, 0755, true);
+            mkdir($dir, 0777, true);
         }
+        @chmod($dir, 0777);
 
         $zip = new \ZipArchive();
         $zip->open($full, \ZipArchive::CREATE | \ZipArchive::OVERWRITE);

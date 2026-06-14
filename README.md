@@ -95,5 +95,16 @@ Stage 3 (update repositories):
 - [x] Auto-generated connection instructions (repo URL + require + token) in
   the cabinet
 
-Next: swap the mock payment/ПРРО/gateway providers for real WayForPay/Fondy +
-checkbox/ДПС (all behind interfaces); admin UI for releases & audit log.
+Stage 4 (admin & audit):
+
+- [x] Admin area (is_admin gate) with dashboard metrics: MRR, active
+  subscriptions/licenses, revenue & failed payments (30d), receipts
+- [x] Products & plans CRUD; release upload (.zip) + publish/unpublish/delete
+- [x] Customers view with manual actions: extend / suspend / reactivate
+  subscription, reissue key, revoke repo token, reset activation
+- [x] Append-only audit log (payments, receipts, license/subscription/
+  activation events, catalog & release changes) with filter
+
+**ТЗ §8 roadmap (stages 1–4) complete.** Remaining for production: swap the
+mock payment/ПРРО/gateway providers for real WayForPay/Fondy + checkbox/ДПС
+(all behind interfaces), and finalize the legal copy.

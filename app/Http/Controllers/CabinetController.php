@@ -122,6 +122,9 @@ class CabinetController extends Controller
             'next_charge_at' => null,
         ]);
 
+        \App\Models\AuditLog::record('subscription', 'subscription.canceled',
+            "Subscription #{$subscription->id} canceled by customer", $subscription);
+
         return back()->with('flash', 'Subscription canceled — it stays active until the end of the paid period.');
     }
 
@@ -130,7 +133,11 @@ class CabinetController extends Controller
         abort_unless($activation->license->user_id === $request->user()->id, 403);
 
         // Frees the activation slot for the license (ТЗ §5.6).
+        $domain = $activation->domain;
         $activation->delete();
+
+        \App\Models\AuditLog::record('activation', 'activation.deactivated',
+            "Domain {$domain} deactivated by customer", $activation->license);
 
         return back()->with('flash', 'Domain deactivated — the activation slot is now free.');
     }

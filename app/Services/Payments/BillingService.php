@@ -104,8 +104,13 @@ class BillingService
                 'grace_until' => null,
             ]);
 
-            $this->fiscal->issue($order->fresh(), $payment);
+            $receipt = $this->fiscal->issue($order->fresh(), $payment);
             $this->syncLicense($subscription->fresh());
+
+            \App\Models\AuditLog::record('payment', 'payment.succeeded',
+                "Renewal charge {$amount} {$order->currency} for subscription #{$subscription->id}", $payment);
+            \App\Models\AuditLog::record('receipt', 'receipt.issued',
+                "Fiscal receipt {$receipt->fiscal_number} issued on renewal", $receipt);
         });
 
         Mail::to($subscription->user->email)->send(new PaymentSucceededMail($subscription->fresh()));
@@ -148,6 +153,8 @@ class BillingService
                 'next_charge_at' => null,
             ]);
             $this->syncLicense($subscription->fresh());
+            \App\Models\AuditLog::record('subscription', 'subscription.suspended',
+                "Subscription #{$subscription->id} suspended after {$attempts} failed charges", $subscription);
             Mail::to($subscription->user->email)->send(new SubscriptionSuspendedMail($subscription->fresh()));
 
             return;
@@ -160,6 +167,8 @@ class BillingService
             'next_charge_at' => $anchor->copy()->addDays($retryDays[$attempts - 1]),
         ]);
         $this->syncLicense($subscription->fresh());
+        \App\Models\AuditLog::record('payment', 'payment.failed',
+            "Charge failed for subscription #{$subscription->id} (attempt {$attempts})", $subscription, ['reason' => $reason]);
         Mail::to($subscription->user->email)->send(new PaymentFailedMail($subscription->fresh()));
     }
 
