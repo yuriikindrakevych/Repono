@@ -72,7 +72,7 @@ class PlanController extends Controller
             'activation_limit' => $data['activation_limit'] ?? null,
             'price_monthly' => $data['price_monthly'] ?? null,
             'price_yearly' => $data['price_yearly'] ?? null,
-            'currency' => 'UAH',
+            'currency' => $product->currency,
             'features' => array_values(array_filter(array_map('trim', explode(',', (string) ($data['features'] ?? ''))))),
             'is_active' => (bool) ($data['is_active'] ?? true),
         ];

@@ -25,25 +25,30 @@ class DashboardController extends Controller
     {
         $entitled = [SubscriptionStatus::Active, SubscriptionStatus::PastDue, SubscriptionStatus::Grace];
 
-        $mrr = Subscription::query()
-            ->whereIn('status', $entitled)
-            ->with('plan')
-            ->get()
-            ->sum(fn (Subscription $s) => $s->billing_period === BillingPeriod::Yearly
+        // MRR is currency-specific — never sum across currencies.
+        $mrrByCurrency = [];
+        foreach (Subscription::whereIn('status', $entitled)->with('plan')->get() as $s) {
+            $monthly = $s->billing_period === BillingPeriod::Yearly
                 ? (int) round(($s->plan->price_yearly ?? 0) / 12)
-                : ($s->plan->price_monthly ?? 0));
+                : ($s->plan->price_monthly ?? 0);
+            $cur = $s->plan->currency;
+            $mrrByCurrency[$cur] = ($mrrByCurrency[$cur] ?? 0) + $monthly;
+        }
+        $mrr = collect($mrrByCurrency)->map(fn ($amount, $cur) => ['currency' => $cur, 'amount' => $amount])->values();
 
         $since = Carbon::now()->subDays(30);
+        $revenue = Payment::where('status', PaymentStatus::Succeeded)->where('created_at', '>=', $since)
+            ->selectRaw('currency, sum(amount) as amount')->groupBy('currency')->get()
+            ->map(fn ($r) => ['currency' => $r->currency, 'amount' => (int) $r->amount])->values();
 
         return Inertia::render('Admin/Dashboard', [
             'metrics' => [
                 'mrr' => $mrr,
-                'currency' => 'UAH',
+                'revenue_30d' => $revenue,
                 'active_subscriptions' => Subscription::whereIn('status', $entitled)->count(),
                 'active_licenses' => License::whereIn('status', [LicenseStatus::Active, LicenseStatus::Grace])->count(),
                 'customers' => User::where('is_admin', false)->count(),
                 'products' => Product::where('status', ProductStatus::Published)->count(),
-                'revenue_30d' => Payment::where('status', PaymentStatus::Succeeded)->where('created_at', '>=', $since)->sum('amount'),
                 'failed_payments_30d' => Payment::where('status', PaymentStatus::Failed)->where('created_at', '>=', $since)->count(),
                 'receipts' => Receipt::count(),
             ],

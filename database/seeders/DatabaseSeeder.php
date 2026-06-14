@@ -41,12 +41,13 @@ class DatabaseSeeder extends Seeder
                 'name' => 'Acme Commerce',
                 'slug' => 'acme-commerce',
                 'type' => ProductType::Drupal,
+                'currency' => 'USD',
                 'tagline' => 'Headless commerce for Drupal, kept current on your release schedule.',
                 'compatibility' => ['cms' => ['Drupal 10', 'Drupal 11'], 'php' => '>=8.2'],
                 'plans' => [
-                    ['name' => 'Single site', 'slug' => 'single', 'activation_limit' => 1, 'price_monthly' => 49000, 'price_yearly' => 490000],
-                    ['name' => '5 sites', 'slug' => 'team', 'activation_limit' => 5, 'price_monthly' => 99000, 'price_yearly' => 990000, 'features' => ['priority-support']],
-                    ['name' => 'Unlimited', 'slug' => 'agency', 'activation_limit' => null, 'price_monthly' => 199000, 'price_yearly' => 1990000, 'features' => ['priority-support', 'white-label']],
+                    ['name' => 'Single site', 'slug' => 'single', 'activation_limit' => 1, 'price_monthly' => 1900, 'price_yearly' => 19000],
+                    ['name' => '5 sites', 'slug' => 'team', 'activation_limit' => 5, 'price_monthly' => 5900, 'price_yearly' => 59000, 'features' => ['priority-support']],
+                    ['name' => 'Unlimited', 'slug' => 'agency', 'activation_limit' => null, 'price_monthly' => 14900, 'price_yearly' => 149000, 'features' => ['priority-support', 'white-label']],
                 ],
                 'releases' => [
                     ['version' => '2.3.0', 'changelog' => 'Stripe 2025 API, order export.'],
@@ -57,11 +58,12 @@ class DatabaseSeeder extends Seeder
                 'name' => 'Pulse Analytics',
                 'slug' => 'pulse-analytics',
                 'type' => ProductType::WordPress,
+                'currency' => 'EUR',
                 'tagline' => 'Privacy-first analytics plugin with automatic updates behind your key.',
                 'compatibility' => ['cms' => ['WordPress 6.4+'], 'php' => '>=8.1'],
                 'plans' => [
-                    ['name' => 'Single site', 'slug' => 'single', 'activation_limit' => 1, 'price_monthly' => 29000, 'price_yearly' => 290000],
-                    ['name' => '5 sites', 'slug' => 'team', 'activation_limit' => 5, 'price_monthly' => 59000, 'price_yearly' => 590000, 'features' => ['priority-support']],
+                    ['name' => 'Single site', 'slug' => 'single', 'activation_limit' => 1, 'price_monthly' => 1500, 'price_yearly' => 15000],
+                    ['name' => '5 sites', 'slug' => 'team', 'activation_limit' => 5, 'price_monthly' => 3900, 'price_yearly' => 39000, 'features' => ['priority-support']],
                 ],
                 'releases' => [
                     ['version' => '1.8.2', 'changelog' => 'GDPR consent mode v2.'],
@@ -77,6 +79,7 @@ class DatabaseSeeder extends Seeder
                 'name' => $row['name'],
                 'slug' => $row['slug'],
                 'type' => $row['type'],
+                'currency' => $row['currency'],
                 'tagline' => $row['tagline'],
                 'description' => $row['tagline'],
                 'compatibility' => $row['compatibility'],
@@ -90,7 +93,7 @@ class DatabaseSeeder extends Seeder
                     'activation_limit' => $plan['activation_limit'],
                     'price_monthly' => $plan['price_monthly'],
                     'price_yearly' => $plan['price_yearly'],
-                    'currency' => 'UAH',
+                    'currency' => $row['currency'],
                     'features' => $plan['features'] ?? [],
                     'sort_order' => $i,
                 ]);

@@ -22,6 +22,7 @@ class FakeFiscalProvider implements FiscalProvider
 
         $receipt = $order->receipt()->create([
             'payment_id' => $payment?->id,
+            'type' => \App\Enums\DocumentType::FiscalReceipt,
             'provider' => 'fake',
             'fiscal_number' => $fiscalNumber,
             'status' => ReceiptStatus::Issued,

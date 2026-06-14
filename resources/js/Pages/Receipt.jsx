@@ -8,6 +8,7 @@ const wrap = { maxWidth: '560px', margin: '0 auto', padding: '0 24px' };
 
 export default function Receipt({ receipt }) {
     const price = `${formatPrice(receipt.total, receipt.currency)} ${receipt.currency}`;
+    const isFiscal = receipt.type !== 'invoice';
 
     const Line = ({ label, value, mono = true }) => (
         <div style={{ display: 'flex', justifyContent: 'space-between', gap: 16, padding: '10px 0',
@@ -30,7 +31,7 @@ export default function Receipt({ receipt }) {
                         <Badge tone={receipt.status === 'issued' ? 'active' : 'warn'} dot>{receipt.status}</Badge>
                     </div>
                     <div style={{ padding: '24px' }}>
-                        <span className="r-eyebrow">Фіскальний чек · ПРРО</span>
+                        <span className="r-eyebrow">{isFiscal ? 'Фіскальний чек · ПРРО' : 'Invoice'}</span>
                         <h1 style={{ fontSize: 'var(--fs-display-sm)', margin: '8px 0 20px' }}>{receipt.fiscal_number}</h1>
                         <div style={{ display: 'grid' }}>
                             <Line label="Product" value={receipt.product} mono={false} />
@@ -48,7 +49,9 @@ export default function Receipt({ receipt }) {
                     </div>
                 </div>
                 <p style={{ textAlign: 'center', fontSize: 'var(--fs-caption)', color: 'var(--text-subtle)', marginTop: 16 }}>
-                    Simulated fiscal receipt for development. A real ПРРО number is issued via checkbox / ДПС in production.
+                    {isFiscal
+                        ? 'Simulated fiscal receipt for development. A real ПРРО number is issued via checkbox / ДПС in production.'
+                        : (receipt.note || 'Invoice for an international sale — no Ukrainian ПРРО applies.')}
                 </p>
             </div>
         </div>

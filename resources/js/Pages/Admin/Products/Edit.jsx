@@ -19,7 +19,7 @@ const Lbl = ({ label, children }) => (
     <label style={{ display: 'grid', gap: 6 }}><span className="r-eyebrow">{label}</span>{children}</label>
 );
 
-function ProductForm({ product, types }) {
+function ProductForm({ product, types, currencies }) {
     const form = useForm({ ...product });
     const save = (e) => { e.preventDefault(); form.put(route('admin.products.update', product.slug)); };
     return (
@@ -33,9 +33,11 @@ function ProductForm({ product, types }) {
                 </div>
                 <Lbl label="Tagline"><input style={field} value={form.data.tagline || ''} onChange={(e) => form.setData('tagline', e.target.value)} /></Lbl>
                 <Lbl label="Description"><textarea style={{ ...field, minHeight: 70 }} value={form.data.description || ''} onChange={(e) => form.setData('description', e.target.value)} /></Lbl>
-                <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: 14 }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', gap: 14 }}>
                     <Lbl label="Compatible CMS (comma-separated)"><input style={field} value={form.data.compat_cms} onChange={(e) => form.setData('compat_cms', e.target.value)} /></Lbl>
                     <Lbl label="PHP"><input style={field} value={form.data.compat_php} onChange={(e) => form.setData('compat_php', e.target.value)} /></Lbl>
+                    <Lbl label="Currency"><select style={field} value={form.data.currency} onChange={(e) => form.setData('currency', e.target.value)}>
+                        {currencies.map((c) => <option key={c} value={c}>{c}</option>)}</select></Lbl>
                     <Lbl label="Status"><select style={field} value={form.data.status} onChange={(e) => form.setData('status', e.target.value)}>
                         <option value="draft">Draft</option><option value="published">Published</option></select></Lbl>
                 </div>
@@ -72,8 +74,8 @@ function AddPlan({ product }) {
             <input style={field} placeholder="Plan name" value={form.data.name} onChange={(e) => form.setData('name', e.target.value)} />
             <input style={field} placeholder="slug" value={form.data.slug} onChange={(e) => form.setData('slug', e.target.value)} />
             <input style={field} placeholder="limit" value={form.data.activation_limit} onChange={(e) => form.setData('activation_limit', e.target.value)} />
-            <input style={field} placeholder="₴/mo (kop.)" value={form.data.price_monthly} onChange={(e) => form.setData('price_monthly', e.target.value)} />
-            <input style={field} placeholder="₴/yr (kop.)" value={form.data.price_yearly} onChange={(e) => form.setData('price_yearly', e.target.value)} />
+            <input style={field} placeholder={`${product.currency}/mo ×100`} value={form.data.price_monthly} onChange={(e) => form.setData('price_monthly', e.target.value)} />
+            <input style={field} placeholder={`${product.currency}/yr ×100`} value={form.data.price_yearly} onChange={(e) => form.setData('price_yearly', e.target.value)} />
             <Button type="submit">Add</Button>
         </form>
     );
@@ -104,7 +106,7 @@ function UploadRelease({ product }) {
     );
 }
 
-export default function Edit({ product, plans, releases, types }) {
+export default function Edit({ product, plans, releases, types, currencies }) {
     const { post, delete: destroy } = useForm({});
     const toggle = (release) => post(route(release.is_published ? 'admin.releases.unpublish' : 'admin.releases.publish', release.id), { preserveScroll: true });
     const del = (release) => { if (confirm(`Delete release ${release.version}?`)) destroy(route('admin.releases.destroy', release.id), { preserveScroll: true }); };
@@ -112,7 +114,7 @@ export default function Edit({ product, plans, releases, types }) {
     return (
         <AdminLayout title={product.name}>
             <Head title={`Admin — ${product.name}`} />
-            <ProductForm product={product} types={types} />
+            <ProductForm product={product} types={types} currencies={currencies} />
 
             <Card title="Plans">
                 <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr 0.8fr 1fr 1fr auto auto', gap: 8 }}>
@@ -122,7 +124,7 @@ export default function Edit({ product, plans, releases, types }) {
                 </div>
                 {plans.map((p) => <PlanRow key={p.id} plan={p} />)}
                 <AddPlan product={product} />
-                <p style={{ fontSize: 'var(--fs-caption)', color: 'var(--text-subtle)', marginTop: 10 }}>Prices are in kopiykas (₴1 = 100). Empty limit = unlimited domains.</p>
+                <p style={{ fontSize: 'var(--fs-caption)', color: 'var(--text-subtle)', marginTop: 10 }}>Prices are in {product.currency} minor units (1 {product.currency} = 100). Empty limit = unlimited domains. Currency follows the product.</p>
             </Card>
 
             <Card title="Releases">

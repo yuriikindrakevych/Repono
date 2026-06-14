@@ -44,7 +44,8 @@ export default function Success({ order }) {
                     </span>
                     <h1 style={{ fontSize: 'var(--fs-display-sm)' }}>Your license is ready.</h1>
                     <p style={{ color: 'var(--text-muted)' }}>
-                        {order.product} · {order.plan} — charged {price} {order.currency}. A fiscal receipt has been issued.
+                        {order.product} · {order.plan} — charged {price} {order.currency}.
+                        {order.receipt ? ` Your ${order.receipt.type_label.toLowerCase()} has been issued.` : ''}
                     </p>
                 </div>
 
@@ -59,13 +60,13 @@ export default function Success({ order }) {
                 </Card>
 
                 {order.receipt ? (
-                    <Card title="Fiscal receipt" headerAction={<Badge tone="active" dot>issued</Badge>}>
+                    <Card title={order.receipt.type_label} headerAction={<Badge tone="active" dot>issued</Badge>}>
                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
                             <span style={{ fontFamily: 'var(--font-mono)', fontSize: 'var(--fs-mono-sm)', color: 'var(--text-body)' }}>
                                 {order.receipt.fiscal_number}
                             </span>
                             <a href={order.receipt.url} target="_blank" rel="noreferrer">
-                                <Button variant="secondary" size="sm" iconLeft={<I.Receipt />}>View receipt</Button>
+                                <Button variant="secondary" size="sm" iconLeft={<I.Receipt />}>View document</Button>
                             </a>
                         </div>
                     </Card>

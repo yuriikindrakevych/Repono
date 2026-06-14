@@ -16,6 +16,7 @@ class Product extends Model
         'name',
         'slug',
         'type',
+        'currency',
         'tagline',
         'description',
         'compatibility',

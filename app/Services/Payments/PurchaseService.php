@@ -10,7 +10,7 @@ use App\Enums\SubscriptionStatus;
 use App\Models\Order;
 use App\Models\Plan;
 use App\Models\User;
-use App\Services\Fiscal\FiscalProvider;
+use App\Services\Documents\DocumentIssuer;
 use App\Services\Licensing\LicenseKeyGenerator;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -19,7 +19,7 @@ use Illuminate\Support\Str;
 class PurchaseService
 {
     public function __construct(
-        private readonly FiscalProvider $fiscal,
+        private readonly DocumentIssuer $documents,
         private readonly LicenseKeyGenerator $keys,
     ) {
     }
@@ -105,13 +105,13 @@ class PurchaseService
                 'license_id' => $license->id,
             ]);
 
-            // Fiscal receipt on every successful charge (ТЗ §5.5).
-            $receipt = $this->fiscal->issue($order->fresh(), $payment);
+            // Fiscal receipt (UAH) or invoice (international) on every charge.
+            $receipt = $this->documents->issue($order->fresh(), $payment);
 
             \App\Models\AuditLog::record('payment', 'payment.succeeded',
                 "Payment of {$order->amount} {$order->currency} for order {$order->gateway_reference}", $payment);
             \App\Models\AuditLog::record('receipt', 'receipt.issued',
-                "Fiscal receipt {$receipt->fiscal_number} issued", $receipt);
+                $receipt->type->label()." {$receipt->fiscal_number} issued", $receipt);
             \App\Models\AuditLog::record('license', 'license.issued',
                 "License {$license->key} issued for {$order->plan->product->name}", $license);
 

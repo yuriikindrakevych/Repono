@@ -11,7 +11,7 @@ use App\Mail\PaymentFailedMail;
 use App\Mail\PaymentSucceededMail;
 use App\Mail\SubscriptionSuspendedMail;
 use App\Models\Subscription;
-use App\Services\Fiscal\FiscalProvider;
+use App\Services\Documents\DocumentIssuer;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
@@ -26,7 +26,7 @@ class BillingService
 {
     public function __construct(
         private readonly PaymentGateway $gateway,
-        private readonly FiscalProvider $fiscal,
+        private readonly DocumentIssuer $documents,
     ) {
     }
 
@@ -104,13 +104,13 @@ class BillingService
                 'grace_until' => null,
             ]);
 
-            $receipt = $this->fiscal->issue($order->fresh(), $payment);
+            $receipt = $this->documents->issue($order->fresh(), $payment);
             $this->syncLicense($subscription->fresh());
 
             \App\Models\AuditLog::record('payment', 'payment.succeeded',
                 "Renewal charge {$amount} {$order->currency} for subscription #{$subscription->id}", $payment);
             \App\Models\AuditLog::record('receipt', 'receipt.issued',
-                "Fiscal receipt {$receipt->fiscal_number} issued on renewal", $receipt);
+                $receipt->type->label()." {$receipt->fiscal_number} issued on renewal", $receipt);
         });
 
         Mail::to($subscription->user->email)->send(new PaymentSucceededMail($subscription->fresh()));

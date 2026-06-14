@@ -58,6 +58,7 @@ class ProductController extends Controller
                 'name' => $product->name,
                 'slug' => $product->slug,
                 'type' => $product->type->value,
+                'currency' => $product->currency,
                 'tagline' => $product->tagline,
                 'description' => $product->description,
                 'compat_cms' => implode(', ', $product->compatibility['cms'] ?? []),
@@ -84,6 +85,7 @@ class ProductController extends Controller
                 'released_at' => $r->released_at?->format('M j, Y'),
             ]),
             'types' => collect(ProductType::cases())->map(fn ($t) => ['value' => $t->value, 'label' => $t->label()]),
+            'currencies' => ['UAH', 'USD', 'EUR', 'GBP'],
         ]);
     }
 
@@ -92,6 +94,8 @@ class ProductController extends Controller
         $data = $this->validateProduct($request, $product);
         $wasPublished = $product->status === ProductStatus::Published;
         $product->update($this->payload($data));
+        // Plans inherit the product currency.
+        $product->plans()->update(['currency' => $product->currency]);
 
         if (! $wasPublished && $product->status === ProductStatus::Published) {
             AuditLog::record('catalog', 'product.published', "Product {$product->name} published", $product);
@@ -111,6 +115,7 @@ class ProductController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'slug' => ['required', 'string', 'max:255', 'regex:/^[a-z0-9-]+$/', Rule::unique('products', 'slug')->ignore($product)],
             'type' => ['required', new Enum(ProductType::class)],
+            'currency' => ['required', 'in:UAH,USD,EUR,GBP'],
             'tagline' => ['nullable', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
             'compat_cms' => ['nullable', 'string', 'max:255'],
@@ -131,6 +136,7 @@ class ProductController extends Controller
             'name' => $data['name'],
             'slug' => $data['slug'],
             'type' => $data['type'],
+            'currency' => $data['currency'],
             'tagline' => $data['tagline'] ?? null,
             'description' => $data['description'] ?? null,
             'compatibility' => array_filter([

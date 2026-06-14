@@ -14,6 +14,7 @@ class Receipt extends Model
     protected $fillable = [
         'order_id',
         'payment_id',
+        'type',
         'provider',
         'fiscal_number',
         'status',
@@ -27,6 +28,7 @@ class Receipt extends Model
     protected function casts(): array
     {
         return [
+            'type' => \App\Enums\DocumentType::class,
             'status' => ReceiptStatus::class,
             'total' => 'integer',
             'payload' => 'array',

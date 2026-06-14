@@ -101,6 +101,7 @@ class CheckoutController extends Controller
                 'license_key' => $order->license?->key,
                 'receipt' => $order->receipt ? [
                     'fiscal_number' => $order->receipt->fiscal_number,
+                    'type_label' => $order->receipt->type->label(),
                     'url' => $order->receipt->url,
                 ] : null,
             ],

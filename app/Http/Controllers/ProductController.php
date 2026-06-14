@@ -49,7 +49,7 @@ class ProductController extends Controller
                 'compatibility' => $product->compatibility,
                 'latest_version' => $latest?->version,
                 'install_command' => $this->installCommand($product),
-                'currency' => $plans->first()?->currency ?? 'UAH',
+                'currency' => $product->currency,
             ],
             'plans' => $plans->map(fn ($plan, $i) => [
                 'id' => $plan->id,

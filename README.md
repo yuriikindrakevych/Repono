@@ -116,6 +116,13 @@ Real payment gateway:
   merchant; set your own `FONDY_*` + `FONDY_SANDBOX=false` for live). `fake`
   remains the default for local dev. Live callbacks need a public URL.
 
-Remaining for production: real ПРРО (checkbox/ДПС) instead of the mock; if
-selling internationally in USD/EUR, revisit fiscalization (invoicing, not ПРРО)
-and reprice plans per currency; finalize legal copy.
+Multi-currency & international fiscalization:
+
+- [x] Currency per product (USD/EUR/UAH/GBP); plans inherit it; prices format
+  with the right symbol ($/€/₴). Fondy charges in the product's currency.
+- [x] Billing document branches by currency: UAH → ПРРО fiscal receipt;
+  USD/EUR/… → invoice (no ПРРО). Both stored as `receipts` with a `type`.
+- [x] Admin currency selector; dashboard MRR/revenue reported per currency.
+
+Remaining for production: real ПРРО (checkbox/ДПС) and a real invoice/VAT
+provider instead of the mocks; finalize legal copy; tests; deploy.

@@ -1,8 +1,13 @@
-/* Money helpers. Prices are stored in minor units (kopiykas); UAH by default. */
+/* Money helpers. Prices are stored in minor units (cents/kopiykas). */
 
-export function formatPrice(minorUnits, currency = 'UAH') {
+const SYMBOLS = { USD: '$', EUR: '€', GBP: '£', UAH: '₴' };
+
+export function formatPrice(minorUnits, currency = 'USD') {
     if (minorUnits == null) return null;
-    const symbol = currency === 'UAH' ? '₴' : '';
-    const amount = Math.round(minorUnits / 100).toLocaleString('uk-UA');
-    return `${symbol}${amount}`;
+    const symbol = SYMBOLS[currency] ?? '';
+    const amount = minorUnits / 100;
+    const formatted = Number.isInteger(amount)
+        ? amount.toLocaleString('en-US')
+        : amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    return `${symbol}${formatted}`;
 }

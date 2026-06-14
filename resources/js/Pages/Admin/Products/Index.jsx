@@ -16,7 +16,7 @@ const field = { width: '100%', height: 'var(--control-h)', padding: '0 12px', bo
 
 export default function Index({ products }) {
     const [open, setOpen] = React.useState(false);
-    const form = useForm({ name: '', slug: '', type: 'drupal', status: 'draft' });
+    const form = useForm({ name: '', slug: '', type: 'drupal', currency: 'USD', status: 'draft' });
 
     const submit = (e) => {
         e.preventDefault();
@@ -29,7 +29,7 @@ export default function Index({ products }) {
 
             {open ? (
                 <form onSubmit={submit} className="r-hairline" style={{ background: 'var(--surface-card)', borderRadius: 'var(--radius-lg)',
-                    padding: 20, marginBottom: 20, display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr auto', gap: 12, alignItems: 'end' }}>
+                    padding: 20, marginBottom: 20, display: 'grid', gridTemplateColumns: '1.2fr 1.2fr 1fr 0.7fr 0.8fr auto', gap: 12, alignItems: 'end' }}>
                     <label style={{ display: 'grid', gap: 6 }}><span className="r-eyebrow">Name</span>
                         <input style={field} value={form.data.name} onChange={(e) => form.setData('name', e.target.value)} /></label>
                     <label style={{ display: 'grid', gap: 6 }}><span className="r-eyebrow">Slug</span>
@@ -37,6 +37,10 @@ export default function Index({ products }) {
                     <label style={{ display: 'grid', gap: 6 }}><span className="r-eyebrow">Type</span>
                         <select style={field} value={form.data.type} onChange={(e) => form.setData('type', e.target.value)}>
                             {TYPES.map((t) => <option key={t.value} value={t.value}>{t.label}</option>)}
+                        </select></label>
+                    <label style={{ display: 'grid', gap: 6 }}><span className="r-eyebrow">Currency</span>
+                        <select style={field} value={form.data.currency} onChange={(e) => form.setData('currency', e.target.value)}>
+                            {['USD', 'EUR', 'UAH', 'GBP'].map((c) => <option key={c} value={c}>{c}</option>)}
                         </select></label>
                     <label style={{ display: 'grid', gap: 6 }}><span className="r-eyebrow">Status</span>
                         <select style={field} value={form.data.status} onChange={(e) => form.setData('status', e.target.value)}>

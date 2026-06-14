@@ -17,6 +17,9 @@ class ReceiptController extends Controller
         return Inertia::render('Receipt', [
             'receipt' => [
                 'fiscal_number' => $receipt->fiscal_number,
+                'type' => $receipt->type->value,
+                'type_label' => $receipt->type->label(),
+                'note' => $receipt->payload['note'] ?? null,
                 'provider' => $receipt->provider,
                 'status' => $receipt->status->value,
                 'total' => $receipt->total,

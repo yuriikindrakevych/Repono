@@ -32,7 +32,7 @@ class LandingController extends Controller
                     'type_label' => $product->type->label(),
                     'tagline' => $product->tagline,
                     'compatibility' => $product->compatibility,
-                    'currency' => $activePlans->first()?->currency ?? 'UAH',
+                    'currency' => $product->currency,
                     'price_from' => $activePlans->whereNotNull('price_monthly')->min('price_monthly'),
                     'latest_version' => $latest?->version,
                     'plans' => $activePlans->map(fn ($p) => [

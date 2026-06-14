@@ -21,14 +21,34 @@ function Stat({ label, value, sub }) {
     );
 }
 
+function MoneyStat({ label, items, sub }) {
+    const many = items.length > 1;
+    return (
+        <div className="r-hairline" style={{ background: 'var(--surface-card)', borderRadius: 'var(--radius-lg)',
+            padding: '18px 20px', display: 'grid', gap: 6 }}>
+            <span className="r-eyebrow">{label}</span>
+            <div style={{ display: 'grid', gap: 2 }}>
+                {items.length === 0 ? (
+                    <span style={{ fontFamily: 'var(--font-display)', fontSize: 'var(--fs-display-sm)', fontWeight: 600, color: 'var(--text-strong)' }}>—</span>
+                ) : items.map((it) => (
+                    <span key={it.currency} style={{ fontFamily: 'var(--font-display)', fontWeight: 600, letterSpacing: '-0.02em',
+                        color: 'var(--text-strong)', fontSize: many ? 'var(--fs-title)' : 'var(--fs-display-sm)' }}>
+                        {formatPrice(it.amount, it.currency)} <span style={{ fontFamily: 'var(--font-mono)', fontSize: 'var(--fs-mono-sm)', color: 'var(--text-subtle)' }}>{it.currency}</span>
+                    </span>
+                ))}
+            </div>
+            {sub ? <span style={{ fontSize: 'var(--fs-caption)', color: 'var(--text-subtle)' }}>{sub}</span> : null}
+        </div>
+    );
+}
+
 export default function Dashboard({ metrics, audit }) {
-    const cur = metrics.currency;
     return (
         <AdminLayout title="Dashboard">
             <Head title="Admin — Dashboard" />
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(190px, 1fr))', gap: 16 }}>
-                <Stat label="MRR" value={`${formatPrice(metrics.mrr, cur)} ${cur}`} sub="monthly recurring revenue" />
-                <Stat label="Revenue · 30d" value={`${formatPrice(metrics.revenue_30d, cur)} ${cur}`} />
+                <MoneyStat label="MRR" items={metrics.mrr} sub="monthly recurring revenue" />
+                <MoneyStat label="Revenue · 30d" items={metrics.revenue_30d} />
                 <Stat label="Active subscriptions" value={metrics.active_subscriptions} />
                 <Stat label="Active licenses" value={metrics.active_licenses} />
                 <Stat label="Customers" value={metrics.customers} />
