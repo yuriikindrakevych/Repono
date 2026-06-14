@@ -1,3 +1,84 @@
+/* Repono design tokens (CSS custom properties). Must precede other rules. */
+@import './repono/colors.css';
+@import './repono/typography.css';
+@import './repono/spacing.css';
+@import './repono/elevation.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* ---------------------------------------------------------------------------
+   Repono base element styles. Declared after Tailwind's preflight (same base
+   layer, later source order) so headings/body inherit the Repono type system
+   on design-system surfaces. Ported from the design system's base.css.
+   --------------------------------------------------------------------------- */
+@layer base {
+    h1, h2, h3, h4, h5 {
+        font-family: var(--font-display);
+        color: var(--text-strong);
+        font-weight: var(--fw-semibold);
+        letter-spacing: var(--ls-display);
+        line-height: var(--lh-snug);
+        text-wrap: balance;
+    }
+    h1 { font-size: var(--fs-display-xl); line-height: var(--lh-tight); }
+    h2 { font-size: var(--fs-display-md); }
+    h3 { font-size: var(--fs-title); letter-spacing: var(--ls-tight); }
+
+    code, kbd, samp, pre {
+        font-family: var(--font-mono);
+        font-feature-settings: "zero" 1;
+    }
+
+    ::selection { background: var(--teal-100); color: var(--ink-800); }
+}
+
+/* Repono helper classes (used across design-system surfaces). */
+.r-eyebrow {
+    font-family: var(--font-mono);
+    font-size: var(--fs-micro);
+    letter-spacing: var(--ls-overline);
+    text-transform: uppercase;
+    color: var(--text-muted);
+    font-weight: var(--fw-medium);
+}
+.r-mono {
+    font-family: var(--font-mono);
+    font-feature-settings: "zero" 1;
+    font-variant-ligatures: none;
+}
+.r-hairline { border: var(--bw-hairline) solid var(--border-default); }
+
+/* The Repono surface wrapper sets the cool page background + body type.
+   Scoped to a class so Breeze/Tailwind auth screens keep their own styling. */
+.repono-surface {
+    font-family: var(--font-body);
+    font-size: var(--fs-body);
+    line-height: var(--lh-normal);
+    color: var(--text-body);
+    background: var(--surface-page);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: "ss01", "cv01";
+}
+
+/* Ghost CTA sitting on the dark inverse band. */
+.rep-cta-ghost { color: var(--text-on-dark) !important; border-color: #313a44 !important; }
+.rep-cta-ghost:hover { background: #20262e !important; }
+
+/* Landing responsive: editorial two-column splits collapse on small screens. */
+@media (max-width: 920px) {
+    .rep-hero, .rep-how { grid-template-columns: 1fr !important; }
+    .rep-navlinks { display: none !important; }
+    .rep-foot-grid { grid-template-columns: 1fr 1fr !important; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+        scroll-behavior: auto !important;
+    }
+}

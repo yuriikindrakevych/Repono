@@ -1,0 +1,56 @@
+/* ===========================================================================
+   Repono — Typography tokens
+   A conscious pair: Geist (modern grotesque) for display + body, JetBrains
+   Mono as a load-bearing part of the identity — versions, hashes, keys, code.
+   Mono is structural, never decorative filler.
+   =========================================================================== */
+:root {
+  /* Families */
+  --font-display: 'Geist', 'Söhne', 'Helvetica Neue', Arial, sans-serif;
+  --font-body:    'Geist', 'Söhne', 'Helvetica Neue', Arial, sans-serif;
+  --font-mono:    'JetBrains Mono', 'Berkeley Mono', 'Commit Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  /* Weights */
+  --fw-regular: 400; /* @kind font */
+  --fw-medium:  500; /* @kind font */
+  --fw-semibold:600; /* @kind font */
+  --fw-bold:    700; /* @kind font */
+
+  /* Type scale — disciplined, no random sizes (1.000 → display)
+     px shown for reference; values in rem against 16px root. */
+  --fs-display-2xl: 4.5rem;   /* 72 — hero headline */
+  --fs-display-xl:  3.5rem;   /* 56 */
+  --fs-display-lg:  2.75rem;  /* 44 */
+  --fs-display-md:  2.125rem; /* 34 — section titles */
+  --fs-display-sm:  1.625rem; /* 26 */
+  --fs-title:       1.3125rem;/* 21 — card titles */
+  --fs-body-lg:     1.125rem; /* 18 — lede */
+  --fs-body:        1rem;     /* 16 — base */
+  --fs-body-sm:     0.875rem; /* 14 — secondary */
+  --fs-caption:     0.8125rem;/* 13 — captions / table meta */
+  --fs-micro:       0.6875rem;/* 11 — overline / eyebrow */
+
+  /* Mono scale (slightly tighter optical sizing) */
+  --fs-mono-lg:     1rem;     /* 16 — terminal hero */
+  --fs-mono:        0.875rem; /* 14 — keys, versions inline */
+  --fs-mono-sm:     0.8125rem;/* 13 — table cells, hashes */
+  --fs-mono-xs:     0.6875rem;/* 11 — dense badges */
+
+  /* Line heights */
+  --lh-tight:   1.04;   /* @kind font */
+  --lh-snug:    1.18;   /* @kind font */
+  --lh-normal:  1.5;    /* @kind font */
+  --lh-relaxed: 1.62;   /* @kind font */
+  --lh-mono:    1.55;   /* @kind font */
+
+  /* Letter spacing */
+  --ls-display: -0.02em;  /* grotesque display tightens */
+  --ls-tight:   -0.01em;
+  --ls-normal:  0em;
+  --ls-wide:    0.02em;
+  --ls-overline:0.14em;   /* eyebrows / overlines, uppercase */
+  --ls-mono:    0em;
+
+  /* Semantic roles */
+  --text-eyebrow-transform: uppercase;
+}

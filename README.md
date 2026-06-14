@@ -68,6 +68,7 @@ Stage 1 (MVP core) — in progress:
 - [x] Auth with email verification (Breeze + Inertia/React)
 - [x] Domain schema: products, plans, releases, subscriptions, licenses, activations
 - [x] License verification endpoint + activation tracking + rate limiting
-- [ ] Catalog & product pages (design system)
+- [x] Design system integrated (tokens + components) + landing with live catalog
+- [ ] Product pages & pricing
 - [ ] Checkout + one-time payment + ПРРО fiscal receipt
 - [ ] Customer cabinet

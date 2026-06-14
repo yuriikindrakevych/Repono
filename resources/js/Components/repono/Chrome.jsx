@@ -1,0 +1,111 @@
+import React from 'react';
+import { Link } from '@inertiajs/react';
+import { Button } from './Button';
+
+/* Repono shared chrome — logo lockup, marketing header, footer.
+   Ported from the design-system UI kit; navigation wired to Inertia routes. */
+
+export function Logo({ dark = false, size = 26 }) {
+    const ink = dark ? '#EAEEF2' : '#171B21';
+    const node = dark ? '#9DC4CA' : '#0E5A66';
+    return (
+        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 10 }}>
+            <svg width={size} height={size} viewBox="0 0 24 24" fill="none" style={{ display: 'block' }}>
+                <rect x="3.4" y="3.4" width="17.2" height="17.2" rx="3.1" stroke={ink} strokeWidth="1.8" />
+                <path d="M3.4 11.6 H20.6" stroke={ink} strokeWidth="1.4" />
+                <rect x="13.7" y="14.1" width="4" height="4" rx="0.8" fill={node} />
+            </svg>
+            <span style={{ fontFamily: 'var(--font-display)', fontWeight: 600, fontSize: size * 0.82,
+                letterSpacing: '-0.03em', color: ink }}>Repono</span>
+        </span>
+    );
+}
+
+function NavAnchor({ href, children }) {
+    return (
+        <a href={href} style={{
+            fontFamily: 'var(--font-body)', fontSize: 'var(--fs-body-sm)', fontWeight: 500,
+            color: 'var(--text-muted)', padding: '6px 2px', cursor: 'pointer',
+        }}>{children}</a>
+    );
+}
+
+export function MarketingHeader({ auth }) {
+    return (
+        <header style={{
+            position: 'sticky', top: 0, zIndex: 20, background: 'var(--surface-page)',
+            borderBottom: '1px solid var(--border-default)',
+        }}>
+            <div style={{ maxWidth: 'var(--container-max)', margin: '0 auto', height: 64, padding: '0 24px',
+                display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 24 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 32 }}>
+                    <Link href={route('home')}><Logo /></Link>
+                    <nav style={{ display: 'flex', alignItems: 'center', gap: 22 }} className="rep-navlinks">
+                        <NavAnchor href="#catalog">Catalog</NavAnchor>
+                        <NavAnchor href="#how">How it works</NavAnchor>
+                        <NavAnchor href="#releases">Changelog</NavAnchor>
+                    </nav>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                    {auth?.user ? (
+                        <Link href={route('dashboard')}>
+                            <Button size="sm" variant="secondary">Dashboard</Button>
+                        </Link>
+                    ) : (
+                        <>
+                            <Link href={route('login')} style={{ fontSize: 'var(--fs-body-sm)', fontWeight: 500, color: 'var(--text-muted)' }}>
+                                Sign in
+                            </Link>
+                            <Link href={route('register')}>
+                                <Button size="sm">Start free trial</Button>
+                            </Link>
+                        </>
+                    )}
+                </div>
+            </div>
+        </header>
+    );
+}
+
+export function Footer({ year = 2026 }) {
+    const col = (title, links) => (
+        <div style={{ display: 'grid', gap: 10, alignContent: 'start' }}>
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '0.12em',
+                textTransform: 'uppercase', color: 'var(--text-subtle)' }}>{title}</span>
+            {links.map((l) => (
+                <a key={l.label} href={l.href} style={{ fontSize: 'var(--fs-body-sm)', color: 'var(--text-muted)' }}>{l.label}</a>
+            ))}
+        </div>
+    );
+    return (
+        <footer style={{ borderTop: '1px solid var(--border-default)', background: 'var(--surface-raised)' }}>
+            <div style={{ maxWidth: 'var(--container-max)', margin: '0 auto', padding: '48px 24px 36px',
+                display: 'grid', gridTemplateColumns: '1.4fr 1fr 1fr 1fr', gap: 32 }} className="rep-foot-grid">
+                <div style={{ display: 'grid', gap: 12, alignContent: 'start' }}>
+                    <Logo size={24} />
+                    <p style={{ fontSize: 'var(--fs-body-sm)', color: 'var(--text-muted)', maxWidth: 240 }}>
+                        The self-hosted registry for selling and licensing the modules you build.
+                    </p>
+                </div>
+                {col('Product', [
+                    { label: 'Catalog', href: '#catalog' },
+                    { label: 'How it works', href: '#how' },
+                    { label: 'Changelog', href: '#releases' },
+                ])}
+                {col('Developers', [
+                    { label: 'License API', href: '#how' },
+                    { label: 'composer require', href: '#how' },
+                ])}
+                {col('Account', [
+                    { label: 'Sign in', href: route('login') },
+                    { label: 'Start free trial', href: route('register') },
+                ])}
+            </div>
+            <div style={{ maxWidth: 'var(--container-max)', margin: '0 auto', padding: '16px 24px',
+                borderTop: '1px solid var(--border-subtle)', display: 'flex', justifyContent: 'space-between' }}>
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: 'var(--text-subtle)' }}>© {year} Repono</span>
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: 'var(--text-subtle)' }}>self-hosted · UA</span>
+            </div>
+        </footer>
+    );
+}
