@@ -7,11 +7,13 @@ use App\Enums\OrderStatus;
 use App\Enums\ProductStatus;
 use App\Models\Order;
 use App\Models\Plan;
+use App\Services\Payments\PaymentGateway;
 use App\Services\Payments\PurchaseService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
+use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 class CheckoutController extends Controller
 {
@@ -42,7 +44,7 @@ class CheckoutController extends Controller
         ]);
     }
 
-    public function store(Request $request, Plan $plan): RedirectResponse
+    public function store(Request $request, Plan $plan, PaymentGateway $gateway): HttpResponse
     {
         $plan->load('product');
         abort_unless($plan->is_active && $plan->product->status === ProductStatus::Published, 404);
@@ -56,20 +58,41 @@ class CheckoutController extends Controller
             user: $request->user(),
             plan: $plan,
             period: BillingPeriod::from($validated['period']),
+            gateway: $gateway->name(),
         );
 
-        return redirect()->route('checkout.gateway', $order);
+        try {
+            $url = $gateway->createCheckout(
+                order: $order,
+                returnUrl: route('checkout.success', $order),
+                callbackUrl: route('webhooks.payment'),
+            );
+        } catch (\Throwable $e) {
+            report($e);
+
+            return back()->with('flash', 'Could not start the payment. Please try again.');
+        }
+
+        // Full-page redirect to the (possibly external) gateway checkout.
+        return Inertia::location($url);
     }
 
     public function success(Request $request, Order $order): Response
     {
         abort_unless($order->user_id === $request->user()->id, 403);
-        abort_unless($order->status === OrderStatus::Paid, 404);
+
+        // The gateway callback may not have landed yet — show a pending state.
+        if ($order->status !== OrderStatus::Paid) {
+            return Inertia::render('Checkout/Success', [
+                'order' => ['pending' => true, 'reference' => $order->gateway_reference],
+            ]);
+        }
 
         $order->load(['plan.product', 'license', 'receipt']);
 
         return Inertia::render('Checkout/Success', [
             'order' => [
+                'pending' => false,
                 'reference' => $order->gateway_reference,
                 'product' => $order->plan->product->name,
                 'plan' => $order->plan->name,

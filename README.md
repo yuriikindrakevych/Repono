@@ -105,6 +105,17 @@ Stage 4 (admin & audit):
 - [x] Append-only audit log (payments, receipts, license/subscription/
   activation events, catalog & release changes) with filter
 
-**ТЗ §8 roadmap (stages 1–4) complete.** Remaining for production: swap the
-mock payment/ПРРО/gateway providers for real WayForPay/Fondy + checkbox/ДПС
-(all behind interfaces), and finalize the legal copy.
+**ТЗ §8 roadmap (stages 1–4) complete.**
+
+Real payment gateway:
+
+- [x] **Fondy** (cloudipsp) integration behind `PaymentGateway`: hosted
+  checkout with tokenization, signature-verified webhook (`/webhooks/payment`,
+  idempotent), server-to-server recurring charge. Multi-currency.
+- Enable with `BILLING_GATEWAY=fondy` (defaults to Fondy's public **sandbox**
+  merchant; set your own `FONDY_*` + `FONDY_SANDBOX=false` for live). `fake`
+  remains the default for local dev. Live callbacks need a public URL.
+
+Remaining for production: real ПРРО (checkbox/ДПС) instead of the mock; if
+selling internationally in USD/EUR, revisit fiscalization (invoicing, not ПРРО)
+and reprice plans per currency; finalize legal copy.

@@ -11,6 +11,26 @@ const wrap = { maxWidth: '640px', margin: '0 auto', padding: '0 24px' };
 
 export default function Success({ order }) {
     const { auth } = usePage().props;
+
+    if (order.pending) {
+        return (
+            <div className="repono-surface">
+                <Head title="Payment processing" />
+                <MarketingHeader auth={auth} />
+                <main style={{ ...wrap, paddingTop: 72, paddingBottom: 96, display: 'grid', gap: 16, textAlign: 'center', justifyItems: 'center' }}>
+                    <span className="r-eyebrow">Checkout</span>
+                    <h1 style={{ fontSize: 'var(--fs-display-sm)' }}>Confirming your payment…</h1>
+                    <p style={{ color: 'var(--text-muted)', maxWidth: '46ch' }}>
+                        We’re waiting for the gateway to confirm order <span className="r-mono">{order.reference}</span>.
+                        Your license and receipt appear in your account the moment it clears — we’ll email you too.
+                    </p>
+                    <Link href={route('cabinet')}><Button size="lg" iconRight={<I.ArrowRight />}>Go to your account</Button></Link>
+                </main>
+                <Footer />
+            </div>
+        );
+    }
+
     const price = formatPrice(order.amount, order.currency);
 
     return (

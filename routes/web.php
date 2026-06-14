@@ -7,6 +7,7 @@ use App\Http\Controllers\LandingController;
 use App\Http\Controllers\LegalController;
 use App\Http\Controllers\MockGatewayController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\PaymentWebhookController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReceiptController;
 use App\Http\Controllers\Updates\ArtifactController;
@@ -16,6 +17,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', LandingController::class)->name('home');
 Route::get('/products/{product}', [ProductController::class, 'show'])->name('products.show');
 Route::get('/legal/{doc}', [LegalController::class, 'show'])->name('legal');
+
+// Payment gateway server callback (signature-verified, CSRF-exempt).
+Route::post('/webhooks/payment', PaymentWebhookController::class)->name('webhooks.payment');
 
 // Private Composer repository for Drupal (http-basic token) + signed artifacts.
 Route::get('/repo/packages.json', [ComposerRepositoryController::class, 'packages'])->name('repo.packages');

@@ -50,9 +50,9 @@ class PurchaseService
      * license and the fiscal receipt. Idempotent — a replayed gateway callback
      * never double-issues (ТЗ §5.4 idempotency).
      */
-    public function fulfill(Order $order, string $transactionId): Order
+    public function fulfill(Order $order, string $transactionId, ?string $rectoken = null): Order
     {
-        return DB::transaction(function () use ($order, $transactionId) {
+        return DB::transaction(function () use ($order, $transactionId, $rectoken) {
             /** @var Order $order */
             $order = Order::whereKey($order->id)->lockForUpdate()->firstOrFail();
 
@@ -84,7 +84,7 @@ class PurchaseService
                 'last_charged_at' => $start,
                 'gateway' => $order->gateway,
                 // Only the tokenized card (rectoken) is stored — never card data.
-                'gateway_token' => 'rectok_'.Str::random(24),
+                'gateway_token' => $rectoken ?: 'rectok_'.Str::random(24),
                 'gateway_reference' => $order->gateway_reference,
             ]);
 

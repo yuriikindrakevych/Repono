@@ -21,9 +21,10 @@ class AppServiceProvider extends ServiceProvider
             \App\Services\Fiscal\FakeFiscalProvider::class,
         );
 
-        // Swap for a real recurring gateway (WayForPay / Fondy) via billing.gateway.
+        // Select the recurring gateway via billing.gateway.
         $this->app->bind(\App\Services\Payments\PaymentGateway::class, function () {
             return match (config('billing.gateway')) {
+                'fondy' => new \App\Services\Payments\FondyGateway(config('billing.fondy')),
                 default => new \App\Services\Payments\FakePaymentGateway(),
             };
         });
