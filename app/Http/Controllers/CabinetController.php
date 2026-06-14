@@ -108,10 +108,11 @@ class CabinetController extends Controller
         abort_unless($subscription->user_id === $request->user()->id, 403);
 
         // Cancellation runs to the end of the paid period (ТЗ §5.4): no proration,
-        // the subscription stays usable until current_period_end.
+        // the subscription stays usable until current_period_end; no further charges.
         $subscription->update([
             'status' => SubscriptionStatus::Canceled,
             'canceled_at' => Carbon::now(),
+            'next_charge_at' => null,
         ]);
 
         return back()->with('flash', 'Subscription canceled — it stays active until the end of the paid period.');

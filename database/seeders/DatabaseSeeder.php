@@ -110,13 +110,18 @@ class DatabaseSeeder extends Seeder
             if ($firstLicense === null) {
                 $plan = $product->plans()->where('slug', 'team')->first();
 
+                $periodEnd = Carbon::now()->addMonths(10);
                 $subscription = Subscription::create([
                     'user_id' => $customer->id,
                     'plan_id' => $plan->id,
                     'status' => SubscriptionStatus::Active,
                     'billing_period' => BillingPeriod::Yearly,
                     'current_period_start' => Carbon::now()->subMonths(2),
-                    'current_period_end' => Carbon::now()->addMonths(10),
+                    'current_period_end' => $periodEnd,
+                    'next_charge_at' => $periodEnd,
+                    'last_charged_at' => Carbon::now()->subMonths(2),
+                    'gateway' => 'fake',
+                    'gateway_token' => 'rectok_demo',
                 ]);
 
                 $firstLicense = License::create([

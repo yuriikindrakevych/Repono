@@ -80,7 +80,11 @@ class PurchaseService
                 'billing_period' => $period,
                 'current_period_start' => $start,
                 'current_period_end' => $end,
+                'next_charge_at' => $end,
+                'last_charged_at' => $start,
                 'gateway' => $order->gateway,
+                // Only the tokenized card (rectoken) is stored — never card data.
+                'gateway_token' => 'rectok_'.Str::random(24),
                 'gateway_reference' => $order->gateway_reference,
             ]);
 

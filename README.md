@@ -73,6 +73,17 @@ Stage 1 (MVP core) — in progress:
 - [x] Customer cabinet (subscriptions, licenses, activations) with cancel & deactivate
 - [x] Checkout + one-time payment (mock gateway, HMAC callback, idempotent) + ПРРО fiscal receipt + license issuance
 
-**Stage 1 (MVP core) is functionally complete.** Next: swap mock payment/ПРРО
-providers for real WayForPay/Fondy + checkbox/ДПС, then Stage 2 (recurrent
-billing, dunning) and Stage 3 (Satis/WP update repositories).
+**Stage 1 (MVP core) is functionally complete.**
+
+Stage 2 (recurrent billing):
+
+- [x] Card tokenization (only the rectoken is stored) + scheduled auto-charge
+  (`subscriptions:charge-due`, daily) via a swappable `PaymentGateway`
+- [x] Dunning on failed charge: retries (+1/+3/+5d), grace period, then
+  suspension; subscription statuses active → past_due → grace → expired
+- [x] License status derived from the subscription (active/grace/suspended),
+  reflected by the verify endpoint
+- [x] Email notifications (payment succeeded / failed / suspended) via Mailpit
+
+Next: swap mock payment/ПРРО for real WayForPay/Fondy + checkbox/ДПС; Stage 3
+(Satis/WP update repositories with token revocation).
