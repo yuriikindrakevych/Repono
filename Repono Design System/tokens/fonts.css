@@ -1,0 +1,6 @@
+/* Repono webfonts.
+   Brief names paid faces (Neue Montreal / Söhne / Berkeley Mono).
+   SUBSTITUTION: free, near-identical equivalents loaded from Google Fonts —
+   Geist (modern grotesque, display + body) and JetBrains Mono (identity monospace).
+   Swap for the licensed faces by replacing this @import + the --font-* tokens. */
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');

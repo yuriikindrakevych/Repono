@@ -1,0 +1,83 @@
+<!-- @dsCard group="Repono UI kit" viewport="1280x820" name="Repono — full product (landing · product · pricing · cabinet)" subtitle="Interactive: navigate screens, expand changelogs, pause subs, flip cabinet states" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Repono — UI kit</title>
+<link rel="stylesheet" href="../../styles.css" />
+<style>
+  html, body { margin: 0; background: var(--surface-page); }
+  /* skeleton shimmer for loading state */
+  .rep-skel { background: linear-gradient(90deg, var(--ink-100) 25%, var(--ink-75) 37%, var(--ink-100) 63%);
+    background-size: 400% 100%; border-radius: var(--radius-xs); animation: rep-shimmer 1.4s ease infinite; }
+  @keyframes rep-shimmer { 0% { background-position: 100% 0 } 100% { background-position: -100% 0 } }
+  @media (prefers-reduced-motion: reduce) { .rep-skel { animation: none } }
+  .rep-cta-ghost { color: var(--text-on-dark) !important; border-color: #313a44 !important; }
+  .rep-cta-ghost:hover { background: #20262e !important; }
+  /* screen switcher */
+  .rep-switch { position: fixed; left: 50%; transform: translateX(-50%); bottom: 18px; z-index: 80;
+    display: flex; gap: 2px; padding: 4px; background: var(--surface-inverse); border: 1px solid #2a323c;
+    border-radius: var(--radius-full); box-shadow: var(--shadow-pop); }
+  .rep-switch button { font-family: var(--font-body); font-size: 13px; font-weight: 500; color: var(--text-on-dark-muted);
+    background: none; border: none; cursor: pointer; padding: 7px 15px; border-radius: var(--radius-full); }
+  .rep-switch button[data-on="true"] { background: #ffffff; color: var(--ink-800); }
+  @media (max-width: 920px) {
+    .rep-hero, .rep-how, .rep-product-grid, .rep-plans, .rep-pay { grid-template-columns: 1fr !important; }
+    .rep-product-aside { position: static !important; }
+    .rep-navlinks { display: none !important; }
+  }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<script src="data.js"></script>
+<script type="text/babel" data-presets="react" src="icons.jsx"></script>
+<script type="text/babel" data-presets="react" src="Chrome.jsx"></script>
+<script type="text/babel" data-presets="react" src="Landing.jsx"></script>
+<script type="text/babel" data-presets="react" src="ProductPage.jsx"></script>
+<script type="text/babel" data-presets="react" src="Pricing.jsx"></script>
+<script type="text/babel" data-presets="react" src="Cabinet.jsx"></script>
+<script type="text/babel" data-presets="react">
+  const ROUTES = [
+    { id: 'landing', label: 'Home' },
+    { id: 'product', label: 'Product' },
+    { id: 'pricing', label: 'Pricing' },
+    { id: 'cabinet', label: 'Account' },
+  ];
+
+  function App() {
+    const [route, setRoute] = React.useState(() => localStorage.getItem('rep-route') || 'landing');
+    const go = React.useCallback((r) => {
+      setRoute(r);
+      try { localStorage.setItem('rep-route', r); } catch (e) {}
+      window.scrollTo({ top: 0, behavior: 'auto' });
+    }, []);
+
+    const isApp = route === 'cabinet';
+    const Screen = { landing: window.RepLanding, product: window.RepProductPage,
+      pricing: window.RepPricing, cabinet: window.RepCabinet }[route];
+
+    return (
+      <React.Fragment>
+        {isApp ? <window.RepAppHeader go={go} /> : <window.RepMarketingHeader route={route} go={go} />}
+        <Screen go={go} />
+        {!isApp ? <window.RepFooter go={go} /> : null}
+        <div className="rep-switch" role="tablist" aria-label="Screens">
+          {ROUTES.map((r) => (
+            <button key={r.id} data-on={route === r.id} onClick={() => go(r.id)}>{r.label}</button>
+          ))}
+        </div>
+      </React.Fragment>
+    );
+  }
+
+  ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

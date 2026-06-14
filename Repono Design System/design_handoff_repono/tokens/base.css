@@ -1,0 +1,82 @@
+/* ===========================================================================
+   Repono — base element styles & a small set of foundational primitives.
+   Lives at the end of the import chain. Keeps element defaults on-brand so
+   bare HTML in cards/screens already looks like Repono.
+   =========================================================================== */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  line-height: var(--lh-normal);
+  color: var(--text-body);
+  background: var(--surface-page);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "ss01", "cv01";
+}
+
+h1, h2, h3, h4, h5 {
+  font-family: var(--font-display);
+  color: var(--text-strong);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--ls-display);
+  line-height: var(--lh-snug);
+  margin: 0;
+  text-wrap: balance;
+}
+h1 { font-size: var(--fs-display-xl); line-height: var(--lh-tight); }
+h2 { font-size: var(--fs-display-md); }
+h3 { font-size: var(--fs-title); letter-spacing: var(--ls-tight); }
+
+p { margin: 0; text-wrap: pretty; }
+
+a { color: var(--text-accent); text-decoration: none; }
+a:hover { color: var(--accent-hover); }
+
+code, kbd, samp, pre {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  font-feature-settings: "zero" 1;
+}
+
+:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 2px;
+  border-radius: var(--radius-xs);
+}
+
+::selection { background: var(--teal-100); color: var(--ink-800); }
+
+/* --- Eyebrow / overline ------------------------------------------------- */
+.r-eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--fs-micro);
+  letter-spacing: var(--ls-overline);
+  text-transform: uppercase;
+  color: var(--text-muted);
+  font-weight: var(--fw-medium);
+}
+
+/* --- Mono inline token (version, hash, key fragment) -------------------- */
+.r-mono {
+  font-family: var(--font-mono);
+  font-feature-settings: "zero" 1;
+  font-variant-ligatures: none;
+}
+
+/* --- Hairline helper ---------------------------------------------------- */
+.r-hairline { border: var(--bw-hairline) solid var(--border-default); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

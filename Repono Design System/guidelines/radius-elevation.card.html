@@ -1,0 +1,38 @@
+<!-- @dsCard group="Spacing" viewport="700x180" name="Radius & elevation" subtitle="Restrained radii (2px default) · cool low-spread shadows for floating only" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<link rel="stylesheet" href="../styles.css" />
+<style>
+  body { margin: 0; padding: 24px; background: var(--surface-page); display: grid; gap: 18px; }
+  .head { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-subtle); margin-bottom: 8px; }
+  .row { display: flex; gap: 16px; }
+  .tile { width: 84px; height: 56px; background: var(--surface-card); border: 1px solid var(--border-default); display: flex; align-items: flex-end; padding: 6px; }
+  .tile span { font-family: var(--font-mono); font-size: 10px; color: var(--text-muted); }
+  .shadow { width: 92px; height: 56px; background: var(--surface-card); border-radius: var(--radius-md); display: flex; align-items: flex-end; padding: 6px; }
+  .shadow span { font-family: var(--font-mono); font-size: 10px; color: var(--text-muted); }
+</style>
+</head>
+<body>
+  <div>
+    <div class="head">Corner radius</div>
+    <div class="row">
+      <div class="tile" style="border-radius:var(--radius-xs)"><span>xs · 2</span></div>
+      <div class="tile" style="border-radius:var(--radius-sm)"><span>sm · 3</span></div>
+      <div class="tile" style="border-radius:var(--radius-md)"><span>md · 5</span></div>
+      <div class="tile" style="border-radius:var(--radius-lg)"><span>lg · 8</span></div>
+      <div class="tile" style="border-radius:var(--radius-xl)"><span>xl · 12</span></div>
+    </div>
+  </div>
+  <div>
+    <div class="head">Elevation — reserved for floating surfaces</div>
+    <div class="row">
+      <div class="shadow" style="box-shadow:var(--shadow-sm)"><span>sm</span></div>
+      <div class="shadow" style="box-shadow:var(--shadow-md)"><span>md</span></div>
+      <div class="shadow" style="box-shadow:var(--shadow-lg)"><span>lg</span></div>
+      <div class="shadow" style="box-shadow:var(--shadow-pop)"><span>pop</span></div>
+    </div>
+  </div>
+</body>
+</html>

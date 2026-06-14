@@ -1,0 +1,108 @@
+/* ===========================================================================
+   Repono — Color tokens
+   The product world is an engineering package registry. Cold light base,
+   deep ink text, one mature petrol-teal accent used pointwise, and a narrow
+   ochre "technical highlight" reserved for version/tag badges.
+   No purple-pink gradients. No glow. No glass.
+   =========================================================================== */
+:root {
+  /* --- Base ramp: cool, slightly blue-gray neutrals (not creamy) --------- */
+  --ink-1000: #0E1116;   /* terminal surface / deepest */
+  --ink-900:  #11151A;   /* terminal surface alt */
+  --ink-800:  #171B21;   /* primary text — deep ink */
+  --ink-700:  #2A2F37;   /* strong text on light, hover ink */
+  --ink-600:  #3C434D;
+  --ink-500:  #5A636E;   /* muted body text */
+  --ink-400:  #7A828D;   /* subtle / placeholder */
+  --ink-300:  #9AA2AC;   /* disabled text */
+  --ink-200:  #C3C9D0;   /* strong hairline */
+  --ink-150:  #DCE1E6;   /* hairline */
+  --ink-100:  #E7EBEF;   /* faint hairline / track */
+  --ink-75:   #EEF1F4;   /* subtle fill */
+  --ink-50:   #F4F6F8;   /* cold light base — the page */
+  --ink-25:   #FAFBFC;   /* raised-but-quiet surface */
+  --white:    #FFFFFF;
+
+  /* --- Accent: muted petrol-teal — appears rarely & pointwise ------------ */
+  --teal-700: #0A434C;   /* pressed */
+  --teal-600: #0E5A66;   /* accent base */
+  --teal-500: #15727F;   /* hover (lighter, per brief: lighten on hover) */
+  --teal-200: #9DC4CA;   /* on-dark accent / borders */
+  --teal-100: #D7E7EA;   /* tint surface */
+  --teal-50:  #EAF2F3;   /* faint tint */
+
+  /* --- Technical highlight: restrained ochre — version/tag badges only --- */
+  --ochre-700: #8A6418;
+  --ochre-600: #B08124;  /* badge text / stroke */
+  --ochre-200: #E6D2A4;
+  --ochre-100: #F3EAD6;  /* badge fill */
+  --ochre-50:  #FAF5E9;
+
+  /* --- Semantic status (heartbeat, payment, releases) -------------------- */
+  --ok-600:    #2F7D4F;  /* active heartbeat / healthy */
+  --ok-500:    #3B935E;
+  --ok-100:    #E0EFE6;
+  --warn-600:  #B08124;  /* shares ochre */
+  --warn-100:  #F3EAD6;
+  --danger-700:#8F352E;
+  --danger-600:#B0413A;  /* payment failed / error */
+  --danger-500:#C75850;
+  --danger-100:#F6E1DF;
+  --info-600:  #0E5A66;  /* shares teal */
+  --info-100:  #D7E7EA;
+
+  /* ======================================================================
+     SEMANTIC ALIASES — reference these in components, not the ramp above.
+     ====================================================================== */
+
+  /* Surfaces */
+  --surface-page:        var(--ink-50);
+  --surface-card:        var(--white);
+  --surface-raised:      var(--ink-25);
+  --surface-sunken:      var(--ink-75);
+  --surface-inset:       var(--ink-100);
+  --surface-terminal:    var(--ink-1000);
+  --surface-terminal-alt:var(--ink-900);
+  --surface-inverse:     var(--ink-800);
+
+  /* Text */
+  --text-strong:    var(--ink-800);
+  --text-body:      var(--ink-700);
+  --text-muted:     var(--ink-500);
+  --text-subtle:    var(--ink-400);
+  --text-disabled:  var(--ink-300);
+  --text-on-dark:        #DDE3E8;
+  --text-on-dark-muted:  #8B95A0;
+  --text-accent:    var(--teal-600);
+  --text-on-accent: var(--white);
+
+  /* Lines */
+  --border-strong:  var(--ink-200);
+  --border-default: var(--ink-150);
+  --border-subtle:  var(--ink-100);
+  --border-accent:  var(--teal-600);
+  --border-focus:   var(--teal-600);
+
+  /* Accent surfaces */
+  --accent:          var(--teal-600);
+  --accent-hover:    var(--teal-500);
+  --accent-pressed:  var(--teal-700);
+  --accent-tint:     var(--teal-100);
+  --accent-tint-faint: var(--teal-50);
+
+  /* Badge / tag (technical highlight) */
+  --badge-version-fg:     var(--ochre-700);
+  --badge-version-bg:     var(--ochre-100);
+  --badge-version-border: var(--ochre-200);
+
+  /* Status */
+  --status-active-fg:  var(--ok-600);
+  --status-active-bg:  var(--ok-100);
+  --status-error-fg:   var(--danger-600);
+  --status-error-bg:   var(--danger-100);
+  --status-warn-fg:    var(--warn-600);
+  --status-warn-bg:    var(--warn-100);
+
+  /* Focus ring */
+  --ring: 0 0 0 3px color-mix(in srgb, var(--teal-600) 28%, transparent);
+}

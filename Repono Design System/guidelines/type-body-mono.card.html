@@ -1,0 +1,36 @@
+<!-- @dsCard group="Type" viewport="700x260" name="Body & mono" subtitle="Geist for prose; JetBrains Mono is load-bearing — versions, keys, hashes" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<link rel="stylesheet" href="../styles.css" />
+<style>
+  body { margin: 0; padding: 28px; background: var(--surface-page); display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+  .col { display: grid; gap: 12px; align-content: start; }
+  .head { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-subtle); }
+  .lede { font-size: 18px; color: var(--text-body); }
+  .body { font-size: 16px; color: var(--text-body); }
+  .small { font-size: 14px; color: var(--text-muted); }
+  .mono { font-family: var(--font-mono); font-feature-settings: "zero" 1; color: var(--text-strong); }
+  .mono div { padding: 3px 0; font-size: 14px; }
+  .mono .dim { color: var(--text-muted); }
+</style>
+</head>
+<body>
+  <div class="col">
+    <span class="head">Geist · body</span>
+    <span class="lede">Ship a module, set a price, let buyers install it with one composer require.</span>
+    <span class="body">Auto-updates roll out on your release schedule. Buyers stay current without touching a thing.</span>
+    <span class="small">14px secondary — table meta, captions, helper text.</span>
+  </div>
+  <div class="col">
+    <span class="head">JetBrains Mono · identity</span>
+    <div class="mono">
+      <div>composer require <span style="color:var(--ochre-600)">repono/acme</span></div>
+      <div>v2.4.1 <span class="dim">→</span> v2.4.2</div>
+      <div>RPN-9F2K-7T1A-QM4D</div>
+      <div class="dim">sha256 9f2k7t1a…qm4d0193</div>
+    </div>
+  </div>
+</body>
+</html>

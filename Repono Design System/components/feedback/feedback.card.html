@@ -1,0 +1,49 @@
+<!-- @dsCard group="Components" viewport="700x520" name="Feedback — alerts, toasts, empty states" subtitle="Errors explain what to do · toasts mirror the verb · empty = invitation" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" href="../../styles.css" />
+<style>
+  body { margin: 0; padding: 28px; background: var(--surface-page); }
+  .stack { display: flex; flex-direction: column; gap: 20px; }
+  .row { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
+</style>
+</head>
+<body>
+<div id="root" class="stack"></div>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<script type="text/babel" data-presets="react">
+  const { Alert, Toast, EmptyState, Button } = window.ReponoDesignSystem_7d8df0;
+  const Card = () => (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="14" x="2" y="5" rx="2"/><path d="M2 10h20"/></svg>);
+  const Pkg = () => (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>);
+  function Demo() {
+    return (
+      <React.Fragment>
+        <Alert tone="error" icon={<Card/>} title="Payment failed"
+          actions={<React.Fragment><Button size="sm" variant="danger">Update payment method</Button><Button size="sm" variant="ghost">View invoice</Button></React.Fragment>}>
+          Your card ending 4242 was declined. Activations keep working for 7 days while you fix this.
+        </Alert>
+        <Alert tone="info" icon={<Pkg/>} title="Update available"
+          actions={<Button size="sm" variant="secondary">Review changelog</Button>}>
+          acme/commerce v2.4.1 is ready. Auto-update is off for this module.
+        </Alert>
+        <div className="row">
+          <Toast tone="success">Subscription <b>paused</b></Toast>
+          <Toast tone="neutral" actionLabel="Undo">Module disconnected</Toast>
+        </div>
+        <EmptyState icon={<Pkg/>} title="No modules connected yet"
+          actions={<Button>Connect module</Button>}>
+          Run a <span className="r-mono">composer require</span>, or paste a license key to activate your first module.
+        </EmptyState>
+      </React.Fragment>
+    );
+  }
+  ReactDOM.createRoot(document.getElementById('root')).render(<Demo/>);
+</script>
+</body>
+</html>

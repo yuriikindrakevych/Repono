@@ -1,0 +1,40 @@
+<!-- @dsCard group="Colors" viewport="700x210" name="Accent & technical highlight" subtitle="Petrol-teal accent (used pointwise) + ochre, reserved for version tags only" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<link rel="stylesheet" href="../styles.css" />
+<style>
+  body { margin: 0; padding: 24px; background: var(--surface-page); display: grid; gap: 18px; }
+  .group { display: grid; gap: 8px; }
+  .head { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-subtle); }
+  .row { display: flex; gap: 10px; }
+  .sw { flex: 1; height: 64px; border-radius: var(--radius-sm); display: flex; flex-direction: column; justify-content: flex-end;
+    padding: 8px; box-shadow: inset 0 0 0 1px rgba(23,27,33,.06); }
+  .sw span { font-family: var(--font-mono); font-size: 10px; }
+  .note { font-size: 12px; color: var(--text-muted); }
+</style>
+</head>
+<body>
+  <div class="group">
+    <div class="head">Petrol-teal — the one mature accent, used rarely</div>
+    <div class="row">
+      <div class="sw" style="background:var(--teal-700)"><span style="color:#fff">700 · #0A434C</span></div>
+      <div class="sw" style="background:var(--teal-600)"><span style="color:#fff">600 · #0E5A66</span></div>
+      <div class="sw" style="background:var(--teal-500)"><span style="color:#fff">500 · #15727F</span></div>
+      <div class="sw" style="background:var(--teal-100)"><span style="color:var(--teal-700)">100 · #D7E7EA</span></div>
+      <div class="sw" style="background:var(--teal-50)"><span style="color:var(--teal-700)">50 · #EAF2F3</span></div>
+    </div>
+  </div>
+  <div class="group">
+    <div class="head">Ochre — technical highlight, version/tag badges only</div>
+    <div class="row">
+      <div class="sw" style="background:var(--ochre-600)"><span style="color:#fff">600 · #B08124</span></div>
+      <div class="sw" style="background:var(--ochre-200)"><span style="color:var(--ochre-700)">200 · #E6D2A4</span></div>
+      <div class="sw" style="background:var(--ochre-100)"><span style="color:var(--ochre-700)">100 · #F3EAD6</span></div>
+      <div class="sw" style="background:var(--ochre-50)"><span style="color:var(--ochre-700)">50 · #FAF5E9</span></div>
+      <div class="sw" style="background:transparent;box-shadow:none;justify-content:center"><span class="note">Never as a fill or CTA — badges only.</span></div>
+    </div>
+  </div>
+</body>
+</html>

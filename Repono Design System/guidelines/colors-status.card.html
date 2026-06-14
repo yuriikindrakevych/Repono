@@ -1,0 +1,36 @@
+<!-- @dsCard group="Colors" viewport="700x150" name="Status colors" subtitle="Heartbeat active, renews-soon, payment failed — muted, accessible" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<link rel="stylesheet" href="../styles.css" />
+<style>
+  body { margin: 0; padding: 24px; background: var(--surface-page); }
+  .row { display: flex; gap: 12px; }
+  .chip { flex: 1; border-radius: var(--radius-sm); padding: 12px 14px; border: 1px solid; display: grid; gap: 6px; }
+  .dot { display: inline-flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 13px; font-weight: 500; }
+  .dot i { width: 8px; height: 8px; border-radius: 999px; background: currentColor; }
+  .hex { font-family: var(--font-mono); font-size: 11px; color: var(--text-subtle); }
+</style>
+</head>
+<body>
+  <div class="row">
+    <div class="chip" style="background:var(--ok-100);border-color:color-mix(in srgb,var(--ok-600) 26%,transparent)">
+      <span class="dot" style="color:var(--ok-600)"><i></i>active</span>
+      <span class="hex">--ok-600 · #2F7D4F</span>
+    </div>
+    <div class="chip" style="background:var(--warn-100);border-color:var(--ochre-200)">
+      <span class="dot" style="color:var(--warn-600)"><i></i>renews soon</span>
+      <span class="hex">--warn-600 · #B08124</span>
+    </div>
+    <div class="chip" style="background:var(--danger-100);border-color:color-mix(in srgb,var(--danger-600) 30%,transparent)">
+      <span class="dot" style="color:var(--danger-600)"><i></i>payment failed</span>
+      <span class="hex">--danger-600 · #B0413A</span>
+    </div>
+    <div class="chip" style="background:var(--info-100);border-color:var(--teal-200)">
+      <span class="dot" style="color:var(--info-600)"><i></i>update available</span>
+      <span class="hex">--info-600 · #0E5A66</span>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!-- @dsCard group="Brand" viewport="700x230" name="Logo & wordmark" subtitle="The mark: a manifest container with a teal version node. Clearspace = mark height." -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<link rel="stylesheet" href="../styles.css" />
+<style>
+  body { margin: 0; padding: 28px; background: var(--surface-page); display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .panel { border: 1px solid var(--border-default); border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center; gap: 12px; min-height: 84px; }
+  .panel--dark { background: var(--surface-terminal); border-color: #232a33; }
+  .lock { display: inline-flex; align-items: center; gap: 11px; }
+  .lock svg { width: 30px; height: 30px; display: block; }
+  .word { font-family: var(--font-display); font-weight: 600; font-size: 27px; letter-spacing: -0.03em; }
+  .ink { color: var(--ink-800); }
+  .light { color: #EAEEF2; }
+  .cap { grid-column: 1 / -1; font-family: var(--font-mono); font-size: 11px; color: var(--text-subtle); }
+  .mono-lock { display:inline-flex; align-items:center; gap:8px; font-family: var(--font-mono); font-size: 15px; color: var(--text-strong); }
+</style>
+</head>
+<body>
+  <div class="panel">
+    <span class="lock">
+      <svg viewBox="0 0 24 24" fill="none"><rect x="3.4" y="3.4" width="17.2" height="17.2" rx="3.1" stroke="#171B21" stroke-width="1.8"/><path d="M3.4 11.6 H20.6" stroke="#171B21" stroke-width="1.4"/><rect x="13.7" y="14.1" width="4" height="4" rx="0.8" fill="#0E5A66"/></svg>
+      <span class="word ink">Repono</span>
+    </span>
+  </div>
+  <div class="panel panel--dark">
+    <span class="lock">
+      <svg viewBox="0 0 24 24" fill="none"><rect x="3.4" y="3.4" width="17.2" height="17.2" rx="3.1" stroke="#EAEEF2" stroke-width="1.8"/><path d="M3.4 11.6 H20.6" stroke="#EAEEF2" stroke-width="1.4"/><rect x="13.7" y="14.1" width="4" height="4" rx="0.8" fill="#9DC4CA"/></svg>
+      <span class="word light">Repono</span>
+    </span>
+  </div>
+  <div class="panel">
+    <span class="lock">
+      <svg viewBox="0 0 24 24" fill="none"><rect x="3.4" y="3.4" width="17.2" height="17.2" rx="3.1" stroke="#171B21" stroke-width="1.8"/><path d="M3.4 11.6 H20.6" stroke="#171B21" stroke-width="1.4"/><rect x="13.7" y="14.1" width="4" height="4" rx="0.8" fill="#0E5A66"/></svg>
+    </span>
+  </div>
+  <div class="panel"><span class="mono-lock">repono<span style="color:var(--text-subtle)">/</span><span style="color:var(--ochre-600)">registry</span></span></div>
+  <span class="cap">Mark stands alone for avatars/favicons. Mono lockup for terminal & CLI contexts.</span>
+</body>
+</html>
