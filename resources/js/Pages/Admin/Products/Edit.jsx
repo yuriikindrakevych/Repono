@@ -3,6 +3,7 @@ import { Head, useForm } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AdminLayout';
 import { Button } from '@/Components/repono/Button';
 import { Badge } from '@/Components/repono/Badge';
+import { t } from '@/i18n';
 
 const field = { width: '100%', minHeight: 'var(--control-h)', padding: '8px 12px', borderRadius: 'var(--radius-sm)',
     border: '1px solid var(--border-strong)', background: 'var(--surface-card)', font: 'inherit',
@@ -10,13 +11,13 @@ const field = { width: '100%', minHeight: 'var(--control-h)', padding: '8px 12px
 const Card = ({ title, children, action }) => (
     <div className="r-hairline" style={{ background: 'var(--surface-card)', borderRadius: 'var(--radius-lg)', overflow: 'clip', marginBottom: 22 }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 20px', borderBottom: '1px solid var(--border-subtle)' }}>
-            <h2 style={{ fontSize: 'var(--fs-title)' }}>{title}</h2>{action}
+            <h2 style={{ fontSize: 'var(--fs-title)' }}>{t(title)}</h2>{action}
         </div>
         <div style={{ padding: 20 }}>{children}</div>
     </div>
 );
 const Lbl = ({ label, children }) => (
-    <label style={{ display: 'grid', gap: 6 }}><span className="r-eyebrow">{label}</span>{children}</label>
+    <label style={{ display: 'grid', gap: 6 }}><span className="r-eyebrow">{t(label)}</span>{children}</label>
 );
 
 function ProductForm({ product, types, currencies }) {
@@ -39,9 +40,9 @@ function ProductForm({ product, types, currencies }) {
                     <Lbl label="Currency"><select style={field} value={form.data.currency} onChange={(e) => form.setData('currency', e.target.value)}>
                         {currencies.map((c) => <option key={c} value={c}>{c}</option>)}</select></Lbl>
                     <Lbl label="Status"><select style={field} value={form.data.status} onChange={(e) => form.setData('status', e.target.value)}>
-                        <option value="draft">Draft</option><option value="published">Published</option></select></Lbl>
+                        <option value="draft">{t('Draft')}</option><option value="published">{t('Published')}</option></select></Lbl>
                 </div>
-                <div><Button type="submit" disabled={form.processing}>Save product</Button></div>
+                <div><Button type="submit" disabled={form.processing}>{t('Save product')}</Button></div>
             </form>
         </Card>
     );
@@ -60,7 +61,7 @@ function PlanRow({ plan }) {
             <input style={field} value={form.data.activation_limit} placeholder="∞" onChange={(e) => form.setData('activation_limit', e.target.value)} />
             <input style={field} value={form.data.price_monthly} placeholder="kopiykas/mo" onChange={(e) => form.setData('price_monthly', e.target.value)} />
             <input style={field} value={form.data.price_yearly} placeholder="kopiykas/yr" onChange={(e) => form.setData('price_yearly', e.target.value)} />
-            <Button size="sm" variant="secondary" type="submit">Save</Button>
+            <Button size="sm" variant="secondary" type="submit">{t('Save')}</Button>
             <Button size="sm" variant="ghost" type="button" onClick={del}>✕</Button>
         </form>
     );
@@ -72,11 +73,11 @@ function AddPlan({ product }) {
     return (
         <form onSubmit={submit} style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr 0.8fr 1fr 1fr auto', gap: 8, marginTop: 12 }}>
             <input style={field} placeholder="Plan name" value={form.data.name} onChange={(e) => form.setData('name', e.target.value)} />
-            <input style={field} placeholder="slug" value={form.data.slug} onChange={(e) => form.setData('slug', e.target.value)} />
-            <input style={field} placeholder="limit" value={form.data.activation_limit} onChange={(e) => form.setData('activation_limit', e.target.value)} />
+            <input style={field} placeholder={t('slug')} value={form.data.slug} onChange={(e) => form.setData('slug', e.target.value)} />
+            <input style={field} placeholder={t('limit')} value={form.data.activation_limit} onChange={(e) => form.setData('activation_limit', e.target.value)} />
             <input style={field} placeholder={`${product.currency}/mo ×100`} value={form.data.price_monthly} onChange={(e) => form.setData('price_monthly', e.target.value)} />
             <input style={field} placeholder={`${product.currency}/yr ×100`} value={form.data.price_yearly} onChange={(e) => form.setData('price_yearly', e.target.value)} />
-            <Button type="submit">Add</Button>
+            <Button type="submit">{t('Add')}</Button>
         </form>
     );
 }
@@ -94,9 +95,9 @@ function UploadRelease({ product }) {
             </div>
             <Lbl label="Changelog"><textarea style={{ ...field, minHeight: 56 }} value={form.data.changelog} onChange={(e) => form.setData('changelog', e.target.value)} /></Lbl>
             <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-                <Button type="submit" disabled={form.processing}>Upload release</Button>
+                <Button type="submit" disabled={form.processing}>{t('Upload release')}</Button>
                 <label style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontSize: 'var(--fs-body-sm)', color: 'var(--text-muted)' }}>
-                    <input type="checkbox" checked={form.data.publish} onChange={(e) => form.setData('publish', e.target.checked)} /> publish now
+                    <input type="checkbox" checked={form.data.publish} onChange={(e) => form.setData('publish', e.target.checked)} /> {t('publish now')}
                 </label>
                 {form.progress ? <span style={{ fontSize: 'var(--fs-caption)', color: 'var(--text-subtle)' }}>{form.progress.percentage}%</span> : null}
                 {form.errors.artifact ? <span style={{ color: 'var(--danger-600)', fontSize: 'var(--fs-caption)' }}>{form.errors.artifact}</span> : null}
@@ -119,7 +120,7 @@ export default function Edit({ product, plans, releases, types, currencies }) {
             <Card title="Plans">
                 <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr 0.8fr 1fr 1fr auto auto', gap: 8 }}>
                     {['Name', 'Slug', 'Limit', 'Monthly', 'Yearly', '', ''].map((h, i) => (
-                        <span key={i} className="r-eyebrow" style={{ paddingBottom: 4 }}>{h}</span>
+                        <span key={i} className="r-eyebrow" style={{ paddingBottom: 4 }}>{h ? t(h) : ''}</span>
                     ))}
                 </div>
                 {plans.map((p) => <PlanRow key={p.id} plan={p} />)}
@@ -129,14 +130,14 @@ export default function Edit({ product, plans, releases, types, currencies }) {
 
             <Card title="Releases">
                 <div style={{ marginBottom: 18 }}>
-                    {releases.length === 0 ? <p style={{ color: 'var(--text-muted)' }}>No releases yet.</p> : releases.map((r) => (
+                    {releases.length === 0 ? <p style={{ color: 'var(--text-muted)' }}>{t('No releases yet.')}</p> : releases.map((r) => (
                         <div key={r.id} style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '10px 0', borderBottom: '1px solid var(--border-subtle)' }}>
                             <span style={{ fontFamily: 'var(--font-mono)', fontSize: 'var(--fs-mono-sm)', color: 'var(--text-strong)', width: 80 }}>{r.version}</span>
                             <Badge tone={r.channel === 'stable' ? 'accent' : 'neutral'}>{r.channel}</Badge>
                             {r.is_published ? <Badge tone="active" dot>published</Badge> : <Badge tone="neutral">draft</Badge>}
                             <span style={{ flex: 1, fontSize: 'var(--fs-body-sm)', color: 'var(--text-muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{r.changelog}</span>
-                            <Button size="sm" variant="secondary" onClick={() => toggle(r)}>{r.is_published ? 'Unpublish' : 'Publish'}</Button>
-                            <Button size="sm" variant="ghost" onClick={() => del(r)}>Delete</Button>
+                            <Button size="sm" variant="secondary" onClick={() => toggle(r)}>{r.is_published ? t('Unpublish') : t('Publish')}</Button>
+                            <Button size="sm" variant="ghost" onClick={() => del(r)}>{t('Delete')}</Button>
                         </div>
                     ))}
                 </div>

@@ -2,6 +2,7 @@ import React from 'react';
 import { Head, Link, router } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AdminLayout';
 import { Badge } from '@/Components/repono/Badge';
+import { t } from '@/i18n';
 
 const cell = { width: '100%', padding: '8px 10px', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-default)',
     background: 'var(--surface-card)', font: 'inherit', fontSize: 'var(--fs-body-sm)', color: 'var(--text-strong)', minHeight: 36 };
@@ -26,7 +27,7 @@ function StringRow({ s, locale }) {
             <textarea style={cell} rows={1} value={value} onChange={(e) => setValue(e.target.value)} onBlur={save}
                 placeholder="—" />
             <span style={{ width: 70, paddingTop: 8, textAlign: 'right' }}>
-                {dirty ? <span style={{ fontSize: 'var(--fs-caption)', color: 'var(--ochre-700)' }}>unsaved</span>
+                {dirty ? <span style={{ fontSize: 'var(--fs-caption)', color: 'var(--ochre-700)' }}>{t('unsaved')}</span>
                     : s.reviewed ? <span style={{ fontSize: 'var(--fs-caption)', color: 'var(--ok-600)' }}>✓</span> : null}
             </span>
         </div>
@@ -38,7 +39,7 @@ export default function Strings({ strings, locale, group, locales }) {
 
     return (
         <AdminLayout title="Edit translations" actions={
-            <Link href={route('admin.languages.index')}><span style={{ fontSize: 'var(--fs-body-sm)', color: 'var(--text-muted)' }}>← Languages</span></Link>
+            <Link href={route('admin.languages.index')}><span style={{ fontSize: 'var(--fs-body-sm)', color: 'var(--text-muted)' }}>← {t('Languages')}</span></Link>
         }>
             <Head title="Admin — Translations" />
 
@@ -47,7 +48,7 @@ export default function Strings({ strings, locale, group, locales }) {
                     {locales.map((l) => <option key={l.code} value={l.code}>{l.native_name} ({l.code})</option>)}
                 </select>
                 <div style={{ display: 'flex', gap: 6 }}>
-                    {[['', 'all'], ['ui', 'UI'], ['content', 'content']].map(([g, label]) => (
+                    {[['', t('all')], ['ui', 'UI'], ['content', t('content')]].map(([g, label]) => (
                         <button key={label} type="button" onClick={() => go({ group: g })} style={{
                             font: 'inherit', fontSize: 'var(--fs-body-sm)', cursor: 'pointer', padding: '6px 12px',
                             borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-default)',
@@ -59,7 +60,7 @@ export default function Strings({ strings, locale, group, locales }) {
 
             <div className="r-hairline" style={{ background: 'var(--surface-card)', borderRadius: 'var(--radius-lg)', padding: '4px 18px 12px' }}>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr auto', gap: 12, padding: '10px 0' }}>
-                    <span className="r-eyebrow">Source (English)</span>
+                    <span className="r-eyebrow">{t('Source (English)')}</span>
                     <span className="r-eyebrow">{locale}</span><span style={{ width: 70 }} />
                 </div>
                 {strings.data.map((s) => <StringRow key={s.group + s.key_hash} s={s} locale={locale} />)}

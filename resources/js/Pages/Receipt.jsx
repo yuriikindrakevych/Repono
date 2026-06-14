@@ -3,6 +3,7 @@ import { Head } from '@inertiajs/react';
 import { Badge } from '@/Components/repono/Badge';
 import { Logo } from '@/Components/repono/Chrome';
 import { formatPrice } from '@/Components/repono/format';
+import { t } from '@/i18n';
 
 const wrap = { maxWidth: '560px', margin: '0 auto', padding: '0 24px' };
 
@@ -31,18 +32,18 @@ export default function Receipt({ receipt }) {
                         <Badge tone={receipt.status === 'issued' ? 'active' : 'warn'} dot>{receipt.status}</Badge>
                     </div>
                     <div style={{ padding: '24px' }}>
-                        <span className="r-eyebrow">{isFiscal ? 'Фіскальний чек · ПРРО' : 'Invoice'}</span>
+                        <span className="r-eyebrow">{isFiscal ? 'Фіскальний чек · ПРРО' : t('Invoice')}</span>
                         <h1 style={{ fontSize: 'var(--fs-display-sm)', margin: '8px 0 20px' }}>{receipt.fiscal_number}</h1>
                         <div style={{ display: 'grid' }}>
-                            <Line label="Product" value={receipt.product} mono={false} />
-                            <Line label="Plan" value={`${receipt.plan} · ${receipt.billing_period}`} mono={false} />
-                            <Line label="Order" value={receipt.reference} />
-                            <Line label="Buyer" value={receipt.buyer} />
-                            <Line label="Issued" value={receipt.issued_at} />
-                            <Line label="Provider" value={receipt.provider} />
+                            <Line label={t('Product')} value={receipt.product} mono={false} />
+                            <Line label={t('Plan')} value={`${receipt.plan} · ${receipt.billing_period}`} mono={false} />
+                            <Line label={t('Order')} value={receipt.reference} />
+                            <Line label={t('Buyer')} value={receipt.buyer} />
+                            <Line label={t('Issued')} value={receipt.issued_at} />
+                            <Line label={t('Provider')} value={receipt.provider} />
                         </div>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', paddingTop: 18 }}>
-                            <span style={{ color: 'var(--text-muted)' }}>Total</span>
+                            <span style={{ color: 'var(--text-muted)' }}>{t('Total')}</span>
                             <span style={{ fontFamily: 'var(--font-display)', fontSize: 'var(--fs-display-sm)',
                                 fontWeight: 600, letterSpacing: '-0.02em', color: 'var(--text-strong)' }}>{price}</span>
                         </div>

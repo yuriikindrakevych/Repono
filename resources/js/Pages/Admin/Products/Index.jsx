@@ -3,6 +3,7 @@ import { Head, Link, useForm } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AdminLayout';
 import { Button } from '@/Components/repono/Button';
 import { Badge } from '@/Components/repono/Badge';
+import { t } from '@/i18n';
 
 const TYPES = [
     { value: 'drupal', label: 'Drupal module' },
@@ -24,29 +25,29 @@ export default function Index({ products }) {
     };
 
     return (
-        <AdminLayout title="Products" actions={<Button size="sm" onClick={() => setOpen((v) => !v)}>{open ? 'Close' : 'New product'}</Button>}>
+        <AdminLayout title="Products" actions={<Button size="sm" onClick={() => setOpen((v) => !v)}>{open ? t('Close') : t('New product')}</Button>}>
             <Head title="Admin — Products" />
 
             {open ? (
                 <form onSubmit={submit} className="r-hairline" style={{ background: 'var(--surface-card)', borderRadius: 'var(--radius-lg)',
                     padding: 20, marginBottom: 20, display: 'grid', gridTemplateColumns: '1.2fr 1.2fr 1fr 0.7fr 0.8fr auto', gap: 12, alignItems: 'end' }}>
-                    <label style={{ display: 'grid', gap: 6 }}><span className="r-eyebrow">Name</span>
+                    <label style={{ display: 'grid', gap: 6 }}><span className="r-eyebrow">{t('Name')}</span>
                         <input style={field} value={form.data.name} onChange={(e) => form.setData('name', e.target.value)} /></label>
-                    <label style={{ display: 'grid', gap: 6 }}><span className="r-eyebrow">Slug</span>
+                    <label style={{ display: 'grid', gap: 6 }}><span className="r-eyebrow">{t('Slug')}</span>
                         <input style={field} value={form.data.slug} placeholder="acme-commerce" onChange={(e) => form.setData('slug', e.target.value)} /></label>
-                    <label style={{ display: 'grid', gap: 6 }}><span className="r-eyebrow">Type</span>
+                    <label style={{ display: 'grid', gap: 6 }}><span className="r-eyebrow">{t('Type')}</span>
                         <select style={field} value={form.data.type} onChange={(e) => form.setData('type', e.target.value)}>
-                            {TYPES.map((t) => <option key={t.value} value={t.value}>{t.label}</option>)}
+                            {TYPES.map((ty) => <option key={ty.value} value={ty.value}>{ty.label}</option>)}
                         </select></label>
-                    <label style={{ display: 'grid', gap: 6 }}><span className="r-eyebrow">Currency</span>
+                    <label style={{ display: 'grid', gap: 6 }}><span className="r-eyebrow">{t('Currency')}</span>
                         <select style={field} value={form.data.currency} onChange={(e) => form.setData('currency', e.target.value)}>
                             {['USD', 'EUR', 'UAH', 'GBP'].map((c) => <option key={c} value={c}>{c}</option>)}
                         </select></label>
-                    <label style={{ display: 'grid', gap: 6 }}><span className="r-eyebrow">Status</span>
+                    <label style={{ display: 'grid', gap: 6 }}><span className="r-eyebrow">{t('Status')}</span>
                         <select style={field} value={form.data.status} onChange={(e) => form.setData('status', e.target.value)}>
-                            <option value="draft">Draft</option><option value="published">Published</option>
+                            <option value="draft">{t('Draft')}</option><option value="published">{t('Published')}</option>
                         </select></label>
-                    <Button type="submit" disabled={form.processing}>Create</Button>
+                    <Button type="submit" disabled={form.processing}>{t('Create')}</Button>
                     {Object.keys(form.errors).length > 0 ? (
                         <span style={{ gridColumn: '1 / -1', color: 'var(--danger-600)', fontSize: 'var(--fs-caption)' }}>
                             {Object.values(form.errors)[0]}
@@ -64,7 +65,7 @@ export default function Index({ products }) {
                             <span style={{ fontFamily: 'var(--font-mono)', fontSize: 'var(--fs-mono-sm)', color: 'var(--text-subtle)' }}>repono/{p.slug} · {p.type_label}</span>
                         </span>
                         <span style={{ fontFamily: 'var(--font-mono)', fontSize: 'var(--fs-mono-sm)', color: 'var(--text-muted)', width: 220 }}>
-                            {p.plans} plans · {p.releases} releases · {p.licenses} licenses
+                            {p.plans} {t('plans')} · {p.releases} {t('releases')} · {p.licenses} {t('licenses')}
                         </span>
                         <Badge tone={p.status === 'published' ? 'active' : 'neutral'} dot>{p.status}</Badge>
                     </Link>

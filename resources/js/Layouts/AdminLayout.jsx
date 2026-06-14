@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, usePage } from '@inertiajs/react';
 import { Logo } from '@/Components/repono/Chrome';
 import { Toast } from '@/Components/repono/Toast';
+import { t } from '@/i18n';
 
 const NAV = [
     { label: 'Dashboard', route: 'admin.dashboard', match: '/admin' },
@@ -48,16 +49,16 @@ export default function AdminLayout({ title, actions, children }) {
                                 fontSize: 'var(--fs-body-sm)', fontWeight: 500,
                                 color: active ? 'var(--text-strong)' : 'var(--text-muted)',
                                 background: active ? 'var(--surface-sunken)' : 'transparent',
-                            }}>{item.label}</Link>
+                            }}>{t(item.label)}</Link>
                         );
                     })}
                 </nav>
                 <div style={{ padding: 16, borderTop: '1px solid var(--border-subtle)', display: 'grid', gap: 8 }}>
                     <span style={{ fontSize: 'var(--fs-caption)', color: 'var(--text-muted)' }}>{auth?.user?.email}</span>
                     <div style={{ display: 'flex', gap: 14 }}>
-                        <Link href={route('home')} style={{ fontSize: 'var(--fs-caption)', color: 'var(--text-muted)' }}>Storefront</Link>
+                        <Link href={route('home')} style={{ fontSize: 'var(--fs-caption)', color: 'var(--text-muted)' }}>{t('Storefront')}</Link>
                         <Link href={route('logout')} method="post" as="button" style={{ background: 'none', border: 'none',
-                            cursor: 'pointer', font: 'inherit', fontSize: 'var(--fs-caption)', color: 'var(--text-muted)' }}>Sign out</Link>
+                            cursor: 'pointer', font: 'inherit', fontSize: 'var(--fs-caption)', color: 'var(--text-muted)' }}>{t('Sign out')}</Link>
                     </div>
                 </div>
             </aside>
@@ -65,7 +66,7 @@ export default function AdminLayout({ title, actions, children }) {
             <main style={{ minWidth: 0 }}>
                 <header style={{ height: 64, borderBottom: '1px solid var(--border-default)', background: 'var(--surface-page)',
                     display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 28px', position: 'sticky', top: 0, zIndex: 10 }}>
-                    <h1 style={{ fontSize: 'var(--fs-display-sm)' }}>{title}</h1>
+                    <h1 style={{ fontSize: 'var(--fs-display-sm)' }}>{t(title)}</h1>
                     <div>{actions}</div>
                 </header>
                 <div style={{ padding: 28, maxWidth: 1200 }}>{children}</div>

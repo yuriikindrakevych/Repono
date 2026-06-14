@@ -11,6 +11,7 @@ import { EmptyState } from '@/Components/repono/EmptyState';
 import { Toast } from '@/Components/repono/Toast';
 import { AppHeader } from '@/Components/repono/Chrome';
 import { formatPrice } from '@/Components/repono/format';
+import { t } from '@/i18n';
 import * as I from '@/Components/repono/icons';
 
 const wrap = { maxWidth: 'var(--container-wide)', margin: '0 auto', padding: '0 24px' };
@@ -36,7 +37,7 @@ function Td({ children, style }) {
 function SubRow({ sub }) {
     const [tone, label] = SUB_TONE[sub.status] || ['neutral', sub.status];
     const cancel = () => {
-        if (!window.confirm('Cancel this subscription? It stays active until the end of the paid period.')) return;
+        if (!window.confirm(t('Cancel this subscription? It stays active until the end of the paid period.'))) return;
         router.post(route('cabinet.subscriptions.cancel', sub.id), {}, { preserveScroll: true });
     };
     return (
@@ -46,14 +47,14 @@ function SubRow({ sub }) {
                     <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
                         <span style={{ fontFamily: 'var(--font-mono)', fontSize: 'var(--fs-mono)', fontWeight: 500,
                             color: 'var(--text-strong)' }}>{sub.product}</span>
-                        <Badge tone={tone} dot>{label}</Badge>
+                        <Badge tone={tone} dot>{t(label)}</Badge>
                     </div>
                     <span style={{ fontSize: 'var(--fs-body-sm)', color: 'var(--text-muted)' }}>
-                        {sub.plan}{sub.renews ? ` · renews ${sub.renews}` : ''}
+                        {sub.plan}{sub.renews ? ` · ${t('renews :date', { date: sub.renews })}` : ''}
                     </span>
                 </div>
                 {sub.can_cancel ? (
-                    <Button variant="danger" size="sm" onClick={cancel}>Cancel</Button>
+                    <Button variant="danger" size="sm" onClick={cancel}>{t('Cancel')}</Button>
                 ) : null}
             </div>
         </Card>
@@ -78,19 +79,19 @@ function SetupBlock({ setup, licenseKey, onCopy }) {
     return (
         <div style={{ display: 'grid', gap: 8 }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <span className="r-eyebrow">{isComposer ? 'Connect via Composer' : 'Connect plugin'}</span>
+                <span className="r-eyebrow">{isComposer ? t('Connect via Composer') : t('Connect plugin')}</span>
                 <Button size="sm" variant="ghost" onClick={() => {
                     navigator.clipboard?.writeText(snippet);
-                    onCopy({ tone: 'success', msg: 'Setup copied' });
-                }}>Copy</Button>
+                    onCopy({ tone: 'success', msg: t('Setup copied') });
+                }}>{t('Copy')}</Button>
             </div>
             <pre style={{ margin: 0, background: 'var(--surface-terminal)', color: '#C7D0DA',
                 borderRadius: 'var(--radius-md)', padding: '14px 16px', fontFamily: 'var(--font-mono)',
                 fontSize: 'var(--fs-mono-sm)', lineHeight: 'var(--lh-mono)', overflowX: 'auto', whiteSpace: 'pre' }}>{snippet}</pre>
             <span style={{ fontSize: 'var(--fs-caption)', color: 'var(--text-subtle)' }}>
                 {isComposer
-                    ? 'Run these once; composer update then keeps the module current behind your license.'
-                    : 'Updates arrive automatically while the license is active.'}
+                    ? t('Run these once; composer update then keeps the module current behind your license.')
+                    : t('Updates arrive automatically while the license is active.')}
             </span>
         </div>
     );
@@ -101,8 +102,8 @@ export default function Cabinet({ subscriptions = [], licenses = [], activations
     const [tab, setTab] = React.useState('subs');
     const [toast, setToast] = React.useState(null);
 
-    const fireToast = React.useCallback((t) => {
-        setToast(t);
+    const fireToast = React.useCallback((notice) => {
+        setToast(notice);
         clearTimeout(window.__repToast);
         window.__repToast = setTimeout(() => setToast(null), 2800);
     }, []);
@@ -112,15 +113,15 @@ export default function Cabinet({ subscriptions = [], licenses = [], activations
     }, [flash?.message, fireToast]);
 
     const TABS = [
-        { value: 'subs', label: 'Subscriptions', count: counts.subscriptions ?? subscriptions.length },
-        { value: 'licenses', label: 'Licenses', count: counts.licenses ?? licenses.length },
-        { value: 'activations', label: 'Activations', count: counts.activations ?? activations.length },
-        { value: 'invoices', label: 'Invoices', count: counts.invoices ?? invoices.length },
-        { value: 'payment', label: 'Payment method' },
+        { value: 'subs', label: t('Subscriptions'), count: counts.subscriptions ?? subscriptions.length },
+        { value: 'licenses', label: t('Licenses'), count: counts.licenses ?? licenses.length },
+        { value: 'activations', label: t('Activations'), count: counts.activations ?? activations.length },
+        { value: 'invoices', label: t('Invoices'), count: counts.invoices ?? invoices.length },
+        { value: 'payment', label: t('Payment method') },
     ];
 
     const deactivate = (a) => {
-        if (!window.confirm(`Deactivate ${a.domain}? This frees the activation slot.`)) return;
+        if (!window.confirm(t('Deactivate :domain? This frees the activation slot.', { domain: a.domain }))) return;
         router.delete(route('cabinet.activations.deactivate', a.id), { preserveScroll: true });
     };
 
@@ -128,9 +129,9 @@ export default function Cabinet({ subscriptions = [], licenses = [], activations
         if (tab === 'subs') {
             if (!subscriptions.length) {
                 return (
-                    <EmptyState icon={<I.Package />} title="No subscriptions yet"
-                        actions={<a href={route('home') + '#catalog'}><Button iconLeft={<I.Plug />}>Browse the catalog</Button></a>}>
-                        Pick a module and a plan to start a subscription. It’ll show up here with its renewal date and license key.
+                    <EmptyState icon={<I.Package />} title={t('No subscriptions yet')}
+                        actions={<a href={route('home') + '#catalog'}><Button iconLeft={<I.Plug />}>{t('Browse the catalog')}</Button></a>}>
+                        {t('Pick a module and a plan to start a subscription. It’ll show up here with its renewal date and license key.')}
                     </EmptyState>
                 );
             }
@@ -140,9 +141,8 @@ export default function Cabinet({ subscriptions = [], licenses = [], activations
         if (tab === 'licenses') {
             if (!licenses.length) {
                 return (
-                    <EmptyState icon={<I.Key />} title="No license keys yet">
-                        Your license keys appear here once you start a subscription — copy one and run a
-                        <span className="r-mono"> composer require</span> to install behind it.
+                    <EmptyState icon={<I.Key />} title={t('No license keys yet')}>
+                        {t('Your license keys appear here once you start a subscription — copy one and run a composer require to install behind it.')}
                     </EmptyState>
                 );
             }
@@ -155,7 +155,7 @@ export default function Cabinet({ subscriptions = [], licenses = [], activations
                                 licenseKey={l.key} status={l.status} heartbeatMeta={l.heartbeat_meta} meta={l.meta}
                                 onCopy={(k) => {
                                     navigator.clipboard?.writeText(k);
-                                    fireToast({ tone: 'success', msg: 'License key copied' });
+                                    fireToast({ tone: 'success', msg: t('License key copied') });
                                 }} />
                             <SetupBlock setup={l.setup} licenseKey={l.key} onCopy={fireToast} />
                         </div>
@@ -167,8 +167,8 @@ export default function Cabinet({ subscriptions = [], licenses = [], activations
         if (tab === 'activations') {
             if (!activations.length) {
                 return (
-                    <EmptyState icon={<I.Globe />} title="No active domains">
-                        Once a module checks in from a domain, it shows up here with its last heartbeat. You can free a slot any time.
+                    <EmptyState icon={<I.Globe />} title={t('No active domains')}>
+                        {t('Once a module checks in from a domain, it shows up here with its last heartbeat. You can free a slot any time.')}
                     </EmptyState>
                 );
             }
@@ -176,7 +176,7 @@ export default function Cabinet({ subscriptions = [], licenses = [], activations
                 <Card flushBody>
                     <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                         <thead><tr>
-                            <Th>Domain</Th><Th>Product</Th><Th>License</Th><Th>Heartbeat</Th><Th style={{ textAlign: 'right' }}>·</Th>
+                            <Th>{t('Domain')}</Th><Th>{t('Product')}</Th><Th>{t('License')}</Th><Th>{t('Heartbeat')}</Th><Th style={{ textAlign: 'right' }}>·</Th>
                         </tr></thead>
                         <tbody>
                             {activations.map((a) => (
@@ -186,7 +186,7 @@ export default function Cabinet({ subscriptions = [], licenses = [], activations
                                     <Td><span style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-muted)' }}>{a.license_key}</span></Td>
                                     <Td><Heartbeat status={a.heartbeat_status} meta={a.heartbeat_meta} /></Td>
                                     <Td style={{ textAlign: 'right' }}>
-                                        <Button variant="ghost" size="sm" onClick={() => deactivate(a)}>Deactivate</Button>
+                                        <Button variant="ghost" size="sm" onClick={() => deactivate(a)}>{t('Deactivate')}</Button>
                                     </Td>
                                 </tr>
                             ))}
@@ -199,8 +199,8 @@ export default function Cabinet({ subscriptions = [], licenses = [], activations
         if (tab === 'invoices') {
             if (!invoices.length) {
                 return (
-                    <EmptyState icon={<I.Receipt />} title="No invoices yet">
-                        Every successful charge generates a fiscal receipt (ПРРО) you can open here. Nothing has been billed yet.
+                    <EmptyState icon={<I.Receipt />} title={t('No invoices yet')}>
+                        {t('Every successful charge generates a receipt you can open here. Nothing has been billed yet.')}
                     </EmptyState>
                 );
             }
@@ -208,7 +208,7 @@ export default function Cabinet({ subscriptions = [], licenses = [], activations
                 <Card flushBody>
                     <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                         <thead><tr>
-                            <Th>Invoice</Th><Th>Date</Th><Th>Description</Th><Th>Amount</Th><Th style={{ textAlign: 'right' }}>·</Th>
+                            <Th>{t('Invoice')}</Th><Th>{t('Date')}</Th><Th>{t('Description')}</Th><Th>{t('Amount')}</Th><Th style={{ textAlign: 'right' }}>·</Th>
                         </tr></thead>
                         <tbody>
                             {invoices.map((v) => (
@@ -220,7 +220,7 @@ export default function Cabinet({ subscriptions = [], licenses = [], activations
                                     <Td style={{ textAlign: 'right' }}>
                                         {v.receipt_url ? (
                                             <a href={v.receipt_url} target="_blank" rel="noreferrer">
-                                                <Button variant="ghost" size="sm" iconLeft={<I.Receipt />}>Receipt</Button>
+                                                <Button variant="ghost" size="sm" iconLeft={<I.Receipt />}>{t('Receipt')}</Button>
                                             </a>
                                         ) : null}
                                     </Td>
@@ -234,15 +234,14 @@ export default function Cabinet({ subscriptions = [], licenses = [], activations
 
         // payment method
         return (
-            <Card title="Payment method">
+            <Card title={t('Payment method')}>
                 <div style={{ display: 'grid', gap: 14, maxWidth: 520 }}>
                     <p style={{ fontSize: 'var(--fs-body-sm)', color: 'var(--text-muted)', margin: 0 }}>
-                        No card on file. You’ll add one securely at checkout when you start your first subscription —
-                        Repono stores only a payment token, never your card number.
+                        {t('No card on file. You’ll add one securely at checkout when you start your first subscription — Repono stores only a payment token, never your card number.')}
                     </p>
                     <div>
                         <a href={route('home') + '#catalog'}>
-                            <Button variant="secondary" iconRight={<I.ArrowRight />}>Browse the catalog</Button>
+                            <Button variant="secondary" iconRight={<I.ArrowRight />}>{t('Browse the catalog')}</Button>
                         </a>
                     </div>
                 </div>
@@ -257,9 +256,9 @@ export default function Cabinet({ subscriptions = [], licenses = [], activations
 
             <main style={{ ...wrap, paddingTop: 28, paddingBottom: 80, flex: 1 }}>
                 <div style={{ display: 'grid', gap: 4, marginBottom: 20 }}>
-                    <h1 style={{ fontSize: 'var(--fs-display-sm)' }}>Account</h1>
+                    <h1 style={{ fontSize: 'var(--fs-display-sm)' }}>{t('Account')}</h1>
                     <span style={{ fontSize: 'var(--fs-body-sm)', color: 'var(--text-muted)' }}>
-                        Manage your subscriptions, licenses and activations.
+                        {t('Manage your subscriptions, licenses and activations.')}
                     </span>
                 </div>
 

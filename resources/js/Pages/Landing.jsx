@@ -128,7 +128,7 @@ export default function Landing({ products = [], releases = [], stats = {}, auth
                     <div style={{ ...wrap, padding: '18px 24px', display: 'flex', alignItems: 'center', gap: 28,
                         flexWrap: 'wrap', justifyContent: 'space-between' }}>
                         <span style={{ fontFamily: 'var(--font-mono)', fontSize: 12, letterSpacing: '0.1em',
-                            textTransform: 'uppercase', color: 'var(--text-subtle)' }}>Speaks your stack</span>
+                            textTransform: 'uppercase', color: 'var(--text-subtle)' }}>{t('Speaks your stack')}</span>
                         <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
                             <Tag mono>composer.json</Tag>
                             <Tag mono>semver</Tag>
@@ -165,22 +165,18 @@ export default function Landing({ products = [], releases = [], stats = {}, auth
                         <span className="r-eyebrow">{t('From publish to paid')}</span>
                         <h2 style={{ fontSize: 'var(--fs-display-md)' }}>{t('Built around the manifest, not a marketplace.')}</h2>
                         <p style={{ color: 'var(--text-muted)', maxWidth: '36ch' }}>
-                            Every release is a signed, versioned artifact. Buyers consume it the way they consume
-                            everything else — through the package manager they already trust.
+                            {t('Every release is a signed, versioned artifact. Buyers consume it the way they consume everything else — through the package manager they already trust.')}
                         </p>
                     </div>
                     <div>
-                        <StepRow n={1} icon={<I.GitBranch />} title="Tag a release">
-                            Push a git tag. Repono builds the artifact, computes its checksum, and writes the
-                            manifest. Stable and beta channels map to your branches.
+                        <StepRow n={1} icon={<I.GitBranch />} title={t('Tag a release')}>
+                            {t('Push a git tag. Repono builds the artifact, computes its checksum, and writes the manifest. Stable and beta channels map to your branches.')}
                         </StepRow>
-                        <StepRow n={2} icon={<I.Key />} title="Set a price and a license">
-                            Choose per-domain or per-seat. Each buyer gets a license key that gates installs and
-                            activations — no key, no update.
+                        <StepRow n={2} icon={<I.Key />} title={t('Set a price and a license')}>
+                            {t('Choose per-domain or per-seat. Each buyer gets a license key that gates installs and activations — no key, no update.')}
                         </StepRow>
-                        <StepRow n={3} icon={<I.Refresh />} title="Updates ship themselves">
-                            Buyers on auto-update pull the next stable release on your schedule. You see every
-                            activation and its last heartbeat in real time.
+                        <StepRow n={3} icon={<I.Refresh />} title={t('Updates ship themselves')}>
+                            {t('Buyers on auto-update pull the next stable release on your schedule. You see every activation and its last heartbeat in real time.')}
                         </StepRow>
                     </div>
                 </section>

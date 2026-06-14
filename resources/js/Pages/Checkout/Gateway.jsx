@@ -3,6 +3,7 @@ import { Head, router } from '@inertiajs/react';
 import { Button } from '@/Components/repono/Button';
 import { Badge } from '@/Components/repono/Badge';
 import { formatPrice } from '@/Components/repono/format';
+import { t } from '@/i18n';
 import * as I from '@/Components/repono/icons';
 
 export default function Gateway({ order, pay_url, signature }) {
@@ -25,9 +26,9 @@ export default function Gateway({ order, pay_url, signature }) {
                     <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontFamily: 'var(--font-mono)',
                         fontSize: 'var(--fs-mono-sm)', color: 'var(--text-muted)' }}>
                         <span style={{ display: 'inline-flex', color: 'var(--text-subtle)' }}><I.Lock /></span>
-                        secure checkout
+                        {t('secure checkout')}
                     </span>
-                    <Badge tone="warn">simulated gateway</Badge>
+                    <Badge tone="warn">{t('simulated gateway')}</Badge>
                 </div>
 
                 <div style={{ padding: '26px 22px', display: 'grid', gap: 18 }}>
@@ -45,15 +46,14 @@ export default function Gateway({ order, pay_url, signature }) {
                     </div>
 
                     <p style={{ fontSize: 'var(--fs-caption)', color: 'var(--text-subtle)', margin: 0 }}>
-                        No real card is charged. The gateway posts a signed (HMAC) result back to Repono, which
-                        verifies it and issues your license and fiscal receipt.
+                        {t('No real card is charged. The gateway posts a signed (HMAC) result back to Repono, which verifies it and issues your license and fiscal receipt.')}
                     </p>
 
                     <div style={{ display: 'grid', gap: 10 }}>
                         <Button size="lg" onClick={() => send('success')} disabled={processing}
-                            iconLeft={<I.Lock />}>Pay {price} {order.currency}</Button>
+                            iconLeft={<I.Lock />}>{t('Pay :amount', { amount: `${price} ${order.currency}` })}</Button>
                         <Button size="lg" variant="danger" onClick={() => send('decline')} disabled={processing}>
-                            Simulate a declined card
+                            {t('Simulate a declined card')}
                         </Button>
                     </div>
                 </div>

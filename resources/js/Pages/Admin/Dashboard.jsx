@@ -3,6 +3,7 @@ import { Head } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AdminLayout';
 import { Badge } from '@/Components/repono/Badge';
 import { formatPrice } from '@/Components/repono/format';
+import { t } from '@/i18n';
 
 const CAT_TONE = {
     payment: 'accent', receipt: 'active', license: 'version',
@@ -47,21 +48,21 @@ export default function Dashboard({ metrics, audit }) {
         <AdminLayout title="Dashboard">
             <Head title="Admin — Dashboard" />
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(190px, 1fr))', gap: 16 }}>
-                <MoneyStat label="MRR" items={metrics.mrr} sub="monthly recurring revenue" />
-                <MoneyStat label="Revenue · 30d" items={metrics.revenue_30d} />
-                <Stat label="Active subscriptions" value={metrics.active_subscriptions} />
-                <Stat label="Active licenses" value={metrics.active_licenses} />
-                <Stat label="Customers" value={metrics.customers} />
-                <Stat label="Published products" value={metrics.products} />
-                <Stat label="Failed payments · 30d" value={metrics.failed_payments_30d} sub="dunning in progress" />
-                <Stat label="Fiscal receipts" value={metrics.receipts} />
+                <MoneyStat label={t('MRR')} items={metrics.mrr} sub={t('monthly recurring revenue')} />
+                <MoneyStat label={t('Revenue · 30d')} items={metrics.revenue_30d} />
+                <Stat label={t('Active subscriptions')} value={metrics.active_subscriptions} />
+                <Stat label={t('Active licenses')} value={metrics.active_licenses} />
+                <Stat label={t('Customers')} value={metrics.customers} />
+                <Stat label={t('Published products')} value={metrics.products} />
+                <Stat label={t('Failed payments · 30d')} value={metrics.failed_payments_30d} sub={t('dunning in progress')} />
+                <Stat label={t('Fiscal receipts')} value={metrics.receipts} />
             </div>
 
             <div style={{ marginTop: 32 }}>
-                <h2 style={{ fontSize: 'var(--fs-title)', marginBottom: 14 }}>Recent activity</h2>
+                <h2 style={{ fontSize: 'var(--fs-title)', marginBottom: 14 }}>{t('Recent activity')}</h2>
                 <div className="r-hairline" style={{ background: 'var(--surface-card)', borderRadius: 'var(--radius-lg)', overflow: 'clip' }}>
                     {audit.length === 0 ? (
-                        <p style={{ padding: 20, color: 'var(--text-muted)' }}>No events yet.</p>
+                        <p style={{ padding: 20, color: 'var(--text-muted)' }}>{t('No events yet.')}</p>
                     ) : audit.map((e) => (
                         <div key={e.id} style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '12px 18px',
                             borderBottom: '1px solid var(--border-subtle)' }}>

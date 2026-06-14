@@ -9,6 +9,7 @@ import { VersionTable } from '@/Components/repono/VersionTable';
 import { Heartbeat } from '@/Components/repono/Heartbeat';
 import { MarketingHeader, Footer } from '@/Components/repono/Chrome';
 import { formatPrice } from '@/Components/repono/format';
+import { t } from '@/i18n';
 import * as I from '@/Components/repono/icons';
 
 const wrap = { maxWidth: 'var(--container-max)', margin: '0 auto', padding: '0 24px' };
@@ -32,7 +33,8 @@ function PlanCard({ plan, period }) {
     const price = formatPrice(minor, plan.currency);
     const cadence = period === 'yearly' ? '/yr' : '/mo';
     const domains = plan.activation_limit === null
-        ? 'Unlimited' : `${plan.activation_limit} domain${plan.activation_limit === 1 ? '' : 's'}`;
+        ? t('Unlimited')
+        : t(':n domains', { n: plan.activation_limit });
 
     return (
         <div style={{
@@ -44,7 +46,7 @@ function PlanCard({ plan, period }) {
         }}>
             {featured ? (
                 <span style={{ position: 'absolute', top: -11, left: 24 }}>
-                    <Badge tone="accent">Most agencies pick this</Badge>
+                    <Badge tone="accent">{t('Most agencies pick this')}</Badge>
                 </span>
             ) : null}
             <div style={{ display: 'grid', gap: 6 }}>
@@ -61,7 +63,7 @@ function PlanCard({ plan, period }) {
             </div>
             <Link href={route('checkout.show', { plan: plan.id, period })}>
                 <Button variant={featured ? 'primary' : 'secondary'} style={{ width: '100%' }}>
-                    {featured ? 'Start free trial' : `Choose ${plan.name}`}
+                    {featured ? t('Start free trial') : t('Choose :plan', { plan: plan.name })}
                 </Button>
             </Link>
             <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'grid', gap: 11,
@@ -93,7 +95,7 @@ export default function Show({ product, plans = [], releases = [], auth }) {
                 <section style={{ borderBottom: '1px solid var(--border-default)', background: 'var(--surface-card)' }}>
                     <div style={{ ...wrap, padding: '36px 24px 32px', display: 'grid', gap: 20 }}>
                         <Link href={route('home') + '#catalog'} style={{ fontSize: 'var(--fs-body-sm)', color: 'var(--text-muted)' }}>
-                            ← Catalog
+                            ← {t('Catalog')}
                         </Link>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
                             <span style={{ fontFamily: 'var(--font-mono)', fontSize: 'var(--fs-mono-lg)', fontWeight: 500,
@@ -101,7 +103,7 @@ export default function Show({ product, plans = [], releases = [], auth }) {
                                 {product.package.split('/')[0]}<span style={{ color: 'var(--text-subtle)' }}>/</span>{product.package.split('/')[1]}
                             </span>
                             {product.latest_version ? <Badge tone="version">v{product.latest_version}</Badge> : null}
-                            <Badge tone="active" dot>maintained</Badge>
+                            <Badge tone="active" dot>{t('maintained')}</Badge>
                         </div>
                         <p style={{ fontSize: 'var(--fs-display-sm)', fontFamily: 'var(--font-display)', fontWeight: 500,
                             letterSpacing: '-0.02em', color: 'var(--text-strong)', maxWidth: '24ch', lineHeight: 1.12 }}>
@@ -120,7 +122,7 @@ export default function Show({ product, plans = [], releases = [], auth }) {
                     {/* MAIN */}
                     <div style={{ display: 'grid', gap: 36, minWidth: 0 }}>
                         <div style={{ display: 'grid', gap: 14 }}>
-                            <h2 style={{ fontSize: 'var(--fs-display-sm)' }}>What it does</h2>
+                            <h2 style={{ fontSize: 'var(--fs-display-sm)' }}>{t('What it does')}</h2>
                             <p style={{ fontSize: 'var(--fs-body-lg)', color: 'var(--text-body)', maxWidth: '64ch' }}>
                                 {product.description || product.tagline}
                             </p>
@@ -128,7 +130,7 @@ export default function Show({ product, plans = [], releases = [], auth }) {
 
                         {releases.length ? (
                             <div style={{ display: 'grid', gap: 16 }}>
-                                <h2 style={{ fontSize: 'var(--fs-display-sm)' }}>Release history</h2>
+                                <h2 style={{ fontSize: 'var(--fs-display-sm)' }}>{t('Release history')}</h2>
                                 <VersionTable defaultOpen={0} releases={releases} />
                             </div>
                         ) : null}
@@ -139,7 +141,7 @@ export default function Show({ product, plans = [], releases = [], auth }) {
                         <Card raised flushBody>
                             <div style={{ padding: 'var(--space-5)', display: 'grid', gap: 14 }}>
                                 <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '0.12em',
-                                    textTransform: 'uppercase', color: 'var(--text-subtle)' }}>Install</span>
+                                    textTransform: 'uppercase', color: 'var(--text-subtle)' }}>{t('Install')}</span>
                                 {isWordPress ? (
                                     <p style={{ fontSize: 'var(--fs-body-sm)', color: 'var(--text-body)', margin: 0 }}>
                                         {product.install_command}
@@ -148,22 +150,22 @@ export default function Show({ product, plans = [], releases = [], auth }) {
                                     <Terminal name="bash" lines={[{ type: 'command', text: product.install_command }]} />
                                 )}
                                 <Link href={route('register')}>
-                                    <Button iconLeft={<I.Plug />} style={{ width: '100%' }}>Connect module</Button>
+                                    <Button iconLeft={<I.Plug />} style={{ width: '100%' }}>{t('Connect module')}</Button>
                                 </Link>
                                 <p style={{ fontSize: 'var(--fs-caption)', color: 'var(--text-subtle)', margin: 0 }}>
-                                    Requires a license key. Start a free trial to get one.
+                                    {t('Requires a license key. Start a free trial to get one.')}
                                 </p>
                             </div>
                         </Card>
 
-                        <Card title="Details">
+                        <Card title={t('Details')}>
                             <div style={{ display: 'grid' }}>
-                                <Meta icon={<I.Package />} label="Type" value={product.type_label} />
-                                {compat.php ? <Meta icon={<I.Terminal />} label="Runtime" value={`PHP ${compat.php}`} /> : null}
-                                <Meta icon={<I.Key />} label="License" value="Per-domain" />
+                                <Meta icon={<I.Package />} label={t('Type')} value={product.type_label} />
+                                {compat.php ? <Meta icon={<I.Terminal />} label={t('Runtime')} value={`PHP ${compat.php}`} /> : null}
+                                <Meta icon={<I.Key />} label={t('License')} value={t('Per-domain')} />
                                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: 12 }}>
-                                    <span style={{ color: 'var(--text-muted)', fontSize: 'var(--fs-body-sm)' }}>Latest build</span>
-                                    <Heartbeat status="active" label="passing" meta="2h ago" />
+                                    <span style={{ color: 'var(--text-muted)', fontSize: 'var(--fs-body-sm)' }}>{t('Latest build')}</span>
+                                    <Heartbeat status="active" label={t('passing')} meta="2h ago" />
                                 </div>
                             </div>
                         </Card>
@@ -176,9 +178,9 @@ export default function Show({ product, plans = [], releases = [], auth }) {
                         <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between',
                             gap: 16, flexWrap: 'wrap', marginBottom: 28 }}>
                             <div style={{ display: 'grid', gap: 10 }}>
-                                <span className="r-eyebrow">Pricing</span>
+                                <span className="r-eyebrow">{t('Pricing')}</span>
                                 <h2 style={{ fontSize: 'var(--fs-display-md)', maxWidth: '20ch' }}>
-                                    Priced per active domain. Staging is free.
+                                    {t('Priced per active domain. Staging is free.')}
                                 </h2>
                             </div>
                             <div style={{ display: 'inline-flex', padding: 3, gap: 2, background: 'var(--surface-sunken)',
@@ -191,7 +193,7 @@ export default function Show({ product, plans = [], releases = [], auth }) {
                                         background: period === p ? 'var(--surface-card)' : 'transparent',
                                         color: period === p ? 'var(--text-strong)' : 'var(--text-muted)',
                                         boxShadow: period === p ? 'var(--shadow-xs)' : 'none',
-                                    }}>{p === 'monthly' ? 'Monthly' : 'Yearly'}</button>
+                                    }}>{p === 'monthly' ? t('Monthly') : t('Yearly')}</button>
                                 ))}
                             </div>
                         </div>

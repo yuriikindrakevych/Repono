@@ -6,6 +6,7 @@ import { Checkbox } from '@/Components/repono/Checkbox';
 import { Alert } from '@/Components/repono/Alert';
 import { MarketingHeader, Footer } from '@/Components/repono/Chrome';
 import { formatPrice } from '@/Components/repono/format';
+import { t } from '@/i18n';
 import * as I from '@/Components/repono/icons';
 
 const wrap = { maxWidth: '720px', margin: '0 auto', padding: '0 24px' };
@@ -14,7 +15,7 @@ export default function Show({ plan, period, amount, currency }) {
     const { auth, flash } = usePage().props;
     const form = useForm({ period, accept_terms: false });
     const price = formatPrice(amount, currency);
-    const cadence = period === 'yearly' ? 'per year' : 'per month';
+    const cadence = period === 'yearly' ? t('per year') : t('per month');
 
     const submit = (e) => {
         e.preventDefault();
@@ -37,18 +38,18 @@ export default function Show({ plan, period, amount, currency }) {
             <MarketingHeader auth={auth} />
             <main style={{ ...wrap, paddingTop: 48, paddingBottom: 80, display: 'grid', gap: 24 }}>
                 <div style={{ display: 'grid', gap: 8 }}>
-                    <span className="r-eyebrow">Checkout</span>
-                    <h1 style={{ fontSize: 'var(--fs-display-sm)' }}>Start your subscription</h1>
+                    <span className="r-eyebrow">{t('Checkout')}</span>
+                    <h1 style={{ fontSize: 'var(--fs-display-sm)' }}>{t('Start your subscription')}</h1>
                 </div>
 
                 {flash?.message ? <Alert tone="error" icon={<I.Receipt />}>{flash.message}</Alert> : null}
 
                 <Card>
                     <div style={{ display: 'grid', gap: 4 }}>
-                        <Row label="Module" value={plan.package} />
-                        <Row label="Plan" value={plan.name} />
-                        <Row label="Billing" value={cadence} />
-                        <Row label="Total" value={`${price} ${currency}`} strong />
+                        <Row label={t('Module')} value={plan.package} />
+                        <Row label={t('Plan')} value={plan.name} />
+                        <Row label={t('Billing')} value={cadence} />
+                        <Row label={t('Total')} value={`${price} ${currency}`} strong />
                     </div>
                 </Card>
 
@@ -58,25 +59,25 @@ export default function Show({ plan, period, amount, currency }) {
                         onChange={(e) => form.setData('accept_terms', e.target.checked)}
                         label={(
                             <span>
-                                I accept the{' '}
-                                <a href={route('legal', 'offer')} target="_blank" rel="noreferrer">public offer</a>
-                                {' '}and the{' '}
-                                <a href={route('legal', 'privacy')} target="_blank" rel="noreferrer">privacy policy</a>.
+                                {t('I accept the')}{' '}
+                                <a href={route('legal', 'offer')} target="_blank" rel="noreferrer">{t('public offer')}</a>
+                                {' '}{t('and the')}{' '}
+                                <a href={route('legal', 'privacy')} target="_blank" rel="noreferrer">{t('privacy policy')}</a>.
                             </span>
                         )}
                     />
                     {form.errors.accept_terms ? (
                         <span style={{ color: 'var(--danger-600)', fontSize: 'var(--fs-caption)' }}>
-                            Please accept the offer and privacy policy to continue.
+                            {t('Please accept the offer and privacy policy to continue.')}
                         </span>
                     ) : null}
 
                     <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
                         <Button type="submit" size="lg" iconRight={<I.ArrowRight />} disabled={form.processing}>
-                            Continue to payment
+                            {t('Continue to payment')}
                         </Button>
                         <span style={{ fontSize: 'var(--fs-caption)', color: 'var(--text-subtle)' }}>
-                            You’ll be charged {price} {currency} {cadence}.
+                            {t('You’ll be charged :amount :cadence.', { amount: `${price} ${currency}`, cadence })}
                         </span>
                     </div>
                 </form>
