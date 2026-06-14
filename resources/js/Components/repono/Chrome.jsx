@@ -48,8 +48,8 @@ export function MarketingHeader({ auth }) {
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                     {auth?.user ? (
-                        <Link href={route('dashboard')}>
-                            <Button size="sm" variant="secondary">Dashboard</Button>
+                        <Link href={route('cabinet')}>
+                            <Button size="sm" variant="secondary">Account</Button>
                         </Link>
                     ) : (
                         <>
@@ -61,6 +61,33 @@ export function MarketingHeader({ auth }) {
                             </Link>
                         </>
                     )}
+                </div>
+            </div>
+        </header>
+    );
+}
+
+export function AppHeader({ user }) {
+    const initial = (user?.name || user?.email || '?').trim().charAt(0).toUpperCase();
+    return (
+        <header style={{ background: 'var(--surface-card)', borderBottom: '1px solid var(--border-default)' }}>
+            <div style={{ maxWidth: 'var(--container-wide)', margin: '0 auto', height: 60, padding: '0 24px',
+                display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+                    <Link href={route('home')}><Logo size={24} /></Link>
+                    <span style={{ width: 1, height: 22, background: 'var(--border-default)' }} />
+                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: 'var(--fs-mono-sm)', color: 'var(--text-muted)' }}>
+                        account
+                    </span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+                    <span style={{ fontSize: 'var(--fs-body-sm)', color: 'var(--text-muted)' }}>{user?.email}</span>
+                    <span style={{ width: 30, height: 30, borderRadius: 'var(--radius-full)', background: 'var(--ink-800)',
+                        color: '#fff', display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                        fontFamily: 'var(--font-mono)', fontSize: 12, fontWeight: 600 }}>{initial}</span>
+                    <Link href={route('logout')} method="post" as="button" style={{
+                        background: 'none', border: 'none', cursor: 'pointer', font: 'inherit',
+                        fontSize: 'var(--fs-body-sm)', color: 'var(--text-muted)' }}>Sign out</Link>
                 </div>
             </div>
         </header>

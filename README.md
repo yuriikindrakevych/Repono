@@ -70,5 +70,5 @@ Stage 1 (MVP core) — in progress:
 - [x] License verification endpoint + activation tracking + rate limiting
 - [x] Design system integrated (tokens + components) + landing with live catalog
 - [x] Product detail page with release history + per-domain pricing plans
+- [x] Customer cabinet (subscriptions, licenses, activations) with cancel & deactivate
 - [ ] Checkout + one-time payment + ПРРО fiscal receipt
-- [ ] Customer cabinet
