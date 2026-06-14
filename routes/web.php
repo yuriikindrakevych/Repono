@@ -54,6 +54,16 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
     Route::get('/', [Admin\DashboardController::class, 'index'])->name('dashboard');
     Route::get('audit', [Admin\AuditController::class, 'index'])->name('audit');
 
+    // Multilingual: languages + mass translation (OpenRouter)
+    Route::get('languages', [Admin\LanguageController::class, 'index'])->name('languages.index');
+    Route::post('languages', [Admin\LanguageController::class, 'store'])->name('languages.store');
+    Route::put('languages/{language}', [Admin\LanguageController::class, 'update'])->name('languages.update');
+    Route::delete('languages/{language}', [Admin\LanguageController::class, 'destroy'])->name('languages.destroy');
+    Route::post('languages/sync', [Admin\LanguageController::class, 'sync'])->name('languages.sync');
+    Route::post('languages/translate', [Admin\LanguageController::class, 'translate'])->name('languages.translate');
+    Route::get('translations', [Admin\TranslationController::class, 'index'])->name('translations.index');
+    Route::put('translations', [Admin\TranslationController::class, 'update'])->name('translations.update');
+
     Route::get('products', [Admin\ProductController::class, 'index'])->name('products.index');
     Route::post('products', [Admin\ProductController::class, 'store'])->name('products.store');
     Route::get('products/{product}/edit', [Admin\ProductController::class, 'edit'])->name('products.edit');

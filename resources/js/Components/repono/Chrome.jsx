@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link } from '@inertiajs/react';
 import { Button } from './Button';
+import { LanguageSwitcher } from './LanguageSwitcher';
+import { t } from '@/i18n';
 
 /* Repono shared chrome — logo lockup, marketing header, footer.
    Ported from the design-system UI kit; navigation wired to Inertia routes. */
@@ -41,23 +43,24 @@ export function MarketingHeader({ auth }) {
                 <div style={{ display: 'flex', alignItems: 'center', gap: 32 }}>
                     <Link href={route('home')}><Logo /></Link>
                     <nav style={{ display: 'flex', alignItems: 'center', gap: 22 }} className="rep-navlinks">
-                        <NavAnchor href="#catalog">Catalog</NavAnchor>
-                        <NavAnchor href="#how">How it works</NavAnchor>
-                        <NavAnchor href="#releases">Changelog</NavAnchor>
+                        <NavAnchor href="#catalog">{t('Catalog')}</NavAnchor>
+                        <NavAnchor href="#how">{t('How it works')}</NavAnchor>
+                        <NavAnchor href="#releases">{t('Changelog')}</NavAnchor>
                     </nav>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                    <LanguageSwitcher compact />
                     {auth?.user ? (
                         <Link href={route('cabinet')}>
-                            <Button size="sm" variant="secondary">Account</Button>
+                            <Button size="sm" variant="secondary">{t('Account')}</Button>
                         </Link>
                     ) : (
                         <>
                             <Link href={route('login')} style={{ fontSize: 'var(--fs-body-sm)', fontWeight: 500, color: 'var(--text-muted)' }}>
-                                Sign in
+                                {t('Sign in')}
                             </Link>
                             <Link href={route('register')}>
-                                <Button size="sm">Start free trial</Button>
+                                <Button size="sm">{t('Start free trial')}</Button>
                             </Link>
                         </>
                     )}
@@ -81,8 +84,9 @@ export function AppHeader({ user }) {
                     </span>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+                    <LanguageSwitcher compact />
                     {user?.is_admin ? (
-                        <Link href={route('admin.dashboard')} style={{ fontSize: 'var(--fs-body-sm)', color: 'var(--text-accent)', fontWeight: 500 }}>Admin</Link>
+                        <Link href={route('admin.dashboard')} style={{ fontSize: 'var(--fs-body-sm)', color: 'var(--text-accent)', fontWeight: 500 }}>{t('Admin')}</Link>
                     ) : null}
                     <span style={{ fontSize: 'var(--fs-body-sm)', color: 'var(--text-muted)' }}>{user?.email}</span>
                     <span style={{ width: 30, height: 30, borderRadius: 'var(--radius-full)', background: 'var(--ink-800)',
@@ -90,7 +94,7 @@ export function AppHeader({ user }) {
                         fontFamily: 'var(--font-mono)', fontSize: 12, fontWeight: 600 }}>{initial}</span>
                     <Link href={route('logout')} method="post" as="button" style={{
                         background: 'none', border: 'none', cursor: 'pointer', font: 'inherit',
-                        fontSize: 'var(--fs-body-sm)', color: 'var(--text-muted)' }}>Sign out</Link>
+                        fontSize: 'var(--fs-body-sm)', color: 'var(--text-muted)' }}>{t('Sign out')}</Link>
                 </div>
             </div>
         </header>
@@ -103,7 +107,7 @@ export function Footer({ year = 2026 }) {
             <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '0.12em',
                 textTransform: 'uppercase', color: 'var(--text-subtle)' }}>{title}</span>
             {links.map((l) => (
-                <a key={l.label} href={l.href} style={{ fontSize: 'var(--fs-body-sm)', color: 'var(--text-muted)' }}>{l.label}</a>
+                <a key={l.label} href={l.href} style={{ fontSize: 'var(--fs-body-sm)', color: 'var(--text-muted)' }}>{t(l.label)}</a>
             ))}
         </div>
     );
@@ -114,19 +118,19 @@ export function Footer({ year = 2026 }) {
                 <div style={{ display: 'grid', gap: 12, alignContent: 'start' }}>
                     <Logo size={24} />
                     <p style={{ fontSize: 'var(--fs-body-sm)', color: 'var(--text-muted)', maxWidth: 240 }}>
-                        The self-hosted registry for selling and licensing the modules you build.
+                        {t('The self-hosted registry for selling and licensing the modules you build.')}
                     </p>
                 </div>
-                {col('Product', [
+                {col(t('Product'), [
                     { label: 'Catalog', href: '#catalog' },
                     { label: 'How it works', href: '#how' },
                     { label: 'Changelog', href: '#releases' },
                 ])}
-                {col('Developers', [
+                {col(t('Developers'), [
                     { label: 'License API', href: '#how' },
                     { label: 'composer require', href: '#how' },
                 ])}
-                {col('Account', [
+                {col(t('Account'), [
                     { label: 'Sign in', href: route('login') },
                     { label: 'Start free trial', href: route('register') },
                 ])}

@@ -26,11 +26,11 @@ class LandingController extends Controller
                 $latest = $product->releases->first();
 
                 return [
-                    'name' => $product->name,
+                    'name' => $product->tr('name'),
                     'slug' => $product->slug,
                     'type' => $product->type->value,
                     'type_label' => $product->type->label(),
-                    'tagline' => $product->tagline,
+                    'tagline' => $product->tr('tagline'),
                     'compatibility' => $product->compatibility,
                     'currency' => $product->currency,
                     'price_from' => $activePlans->whereNotNull('price_monthly')->min('price_monthly'),

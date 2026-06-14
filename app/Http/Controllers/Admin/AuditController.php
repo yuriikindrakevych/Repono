@@ -32,7 +32,7 @@ class AuditController extends Controller
         return Inertia::render('Admin/Audit', [
             'logs' => $logs,
             'category' => $category,
-            'categories' => ['payment', 'receipt', 'license', 'subscription', 'activation', 'catalog', 'release'],
+            'categories' => ['payment', 'receipt', 'license', 'subscription', 'activation', 'catalog', 'release', 'i18n'],
         ]);
     }
 }

@@ -8,6 +8,7 @@ import { LicenseCard } from '@/Components/repono/LicenseCard';
 import { VersionTable } from '@/Components/repono/VersionTable';
 import { MarketingHeader, Footer } from '@/Components/repono/Chrome';
 import { formatPrice } from '@/Components/repono/format';
+import { t } from '@/i18n';
 import * as I from '@/Components/repono/icons';
 
 const wrap = { maxWidth: 'var(--container-max)', margin: '0 auto', padding: '0 24px' };
@@ -58,10 +59,10 @@ function ProductCard({ product }) {
             <div style={{ padding: '14px 20px', borderTop: '1px solid var(--border-subtle)', background: 'var(--surface-raised)',
                 display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
                 <span style={{ fontFamily: 'var(--font-mono)', fontSize: 'var(--fs-mono-sm)', color: 'var(--text-body)' }}>
-                    {price ? <>from <b style={{ color: 'var(--text-strong)' }}>{price}</b>/mo</> : 'Contact us'}
+                    {price ? <>{t('from')} <b style={{ color: 'var(--text-strong)' }}>{price}</b>{t('/mo')}</> : t('Contact us')}
                 </span>
                 <Link href={route('products.show', product.slug)}>
-                    <Button size="sm" variant="secondary" iconRight={<I.ArrowRight />}>View plans</Button>
+                    <Button size="sm" variant="secondary" iconRight={<I.ArrowRight />}>{t('View plans')}</Button>
                 </Link>
             </div>
         </div>
@@ -79,21 +80,21 @@ export default function Landing({ products = [], releases = [], stats = {}, auth
                 <section style={{ ...wrap, paddingTop: 72, paddingBottom: 64,
                     display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 56, alignItems: 'center' }} className="rep-hero">
                     <div style={{ display: 'grid', gap: 24 }}>
-                        <span className="r-eyebrow">Self-hosted package registry</span>
+                        <span className="r-eyebrow">{t('Self-hosted package registry')}</span>
                         <h1 style={{ fontSize: 'clamp(40px, 5vw, 60px)', lineHeight: 1.02, letterSpacing: '-0.03em' }}>
-                            Sell your modules.<br />Ship updates with one&nbsp;line.
+                            {t('Sell your modules.')}<br />{t('Ship updates with one line.')}
                         </h1>
                         <p style={{ fontSize: 'var(--fs-body-lg)', color: 'var(--text-muted)', maxWidth: '46ch' }}>
-                            Repono is the registry for the Drupal modules, WordPress plugins and apps you build.
-                            Buyers run one <span className="r-mono" style={{ color: 'var(--text-body)' }}>composer require</span> and
-                            stay current automatically — on your release schedule, behind your license keys.
+                            {t('Repono is the registry for the Drupal modules, WordPress plugins and apps you build.')}{' '}
+                            {t('Buyers run one')} <span className="r-mono" style={{ color: 'var(--text-body)' }}>composer require</span>{' '}
+                            {t('and stay current automatically — on your release schedule, behind your license keys.')}
                         </p>
                         <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginTop: 4 }}>
                             <Link href={route('register')}>
-                                <Button size="lg" iconLeft={<I.Plug />}>Start free trial</Button>
+                                <Button size="lg" iconLeft={<I.Plug />}>{t('Start free trial')}</Button>
                             </Link>
                             <a href="#catalog">
-                                <Button size="lg" variant="secondary" iconRight={<I.ArrowRight />}>Browse the catalog</Button>
+                                <Button size="lg" variant="secondary" iconRight={<I.ArrowRight />}>{t('Browse the catalog')}</Button>
                             </a>
                         </div>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 18, marginTop: 8,
@@ -144,8 +145,8 @@ export default function Landing({ products = [], releases = [], stats = {}, auth
                     <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between',
                         marginBottom: 24, gap: 16, flexWrap: 'wrap' }}>
                         <div style={{ display: 'grid', gap: 8 }}>
-                            <span className="r-eyebrow">Catalog</span>
-                            <h2 style={{ fontSize: 'var(--fs-display-md)' }}>Modules, plugins and apps — licensed and current.</h2>
+                            <span className="r-eyebrow">{t('Catalog')}</span>
+                            <h2 style={{ fontSize: 'var(--fs-display-md)' }}>{t('Modules, plugins and apps — licensed and current.')}</h2>
                         </div>
                     </div>
                     {products.length ? (
@@ -161,8 +162,8 @@ export default function Landing({ products = [], releases = [], stats = {}, auth
                 <section id="how" style={{ ...wrap, paddingTop: 40, paddingBottom: 40,
                     display: 'grid', gridTemplateColumns: '0.8fr 1.2fr', gap: 48 }} className="rep-how">
                     <div style={{ position: 'sticky', top: 88, alignSelf: 'start', display: 'grid', gap: 14 }}>
-                        <span className="r-eyebrow">From publish to paid</span>
-                        <h2 style={{ fontSize: 'var(--fs-display-md)' }}>Built around the manifest, not a marketplace.</h2>
+                        <span className="r-eyebrow">{t('From publish to paid')}</span>
+                        <h2 style={{ fontSize: 'var(--fs-display-md)' }}>{t('Built around the manifest, not a marketplace.')}</h2>
                         <p style={{ color: 'var(--text-muted)', maxWidth: '36ch' }}>
                             Every release is a signed, versioned artifact. Buyers consume it the way they consume
                             everything else — through the package manager they already trust.
@@ -188,8 +189,8 @@ export default function Landing({ products = [], releases = [], stats = {}, auth
                 {releases.length ? (
                     <section id="releases" style={{ ...wrap, paddingTop: 40, paddingBottom: 80 }}>
                         <div style={{ display: 'grid', gap: 8, marginBottom: 20 }}>
-                            <span className="r-eyebrow">Release history</span>
-                            <h2 style={{ fontSize: 'var(--fs-display-sm)' }}>Every version, every changelog — in the open.</h2>
+                            <span className="r-eyebrow">{t('Release history')}</span>
+                            <h2 style={{ fontSize: 'var(--fs-display-sm)' }}>{t('Every version, every changelog — in the open.')}</h2>
                         </div>
                         <VersionTable defaultOpen={0} releases={releases} />
                     </section>
@@ -200,17 +201,17 @@ export default function Landing({ products = [], releases = [], stats = {}, auth
                     <div style={{ ...wrap, padding: '64px 24px', display: 'flex', alignItems: 'center',
                         justifyContent: 'space-between', gap: 32, flexWrap: 'wrap' }}>
                         <div style={{ display: 'grid', gap: 10 }}>
-                            <h2 style={{ color: 'var(--white)', fontSize: 'var(--fs-display-md)' }}>Put your first module on the registry.</h2>
+                            <h2 style={{ color: 'var(--white)', fontSize: 'var(--fs-display-md)' }}>{t('Put your first module on the registry.')}</h2>
                             <p style={{ color: 'var(--text-on-dark-muted)', maxWidth: '44ch' }}>
-                                Free while you set it up. You only pay once buyers do.
+                                {t('Free while you set it up. You only pay once buyers do.')}
                             </p>
                         </div>
                         <div style={{ display: 'flex', gap: 12 }}>
                             <Link href={route('register')}>
-                                <Button size="lg">Start free trial</Button>
+                                <Button size="lg">{t('Start free trial')}</Button>
                             </Link>
                             <Link href={route('login')}>
-                                <Button size="lg" variant="ghost" className="rep-cta-ghost">Open your account</Button>
+                                <Button size="lg" variant="ghost" className="rep-cta-ghost">{t('Open your account')}</Button>
                             </Link>
                         </div>
                     </div>

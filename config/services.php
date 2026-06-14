@@ -35,4 +35,12 @@ return [
         ],
     ],
 
+    // Mass translation via OpenRouter. Without a key the FakeTranslator is used.
+    'openrouter' => [
+        'key' => env('OPENROUTER_API_KEY'),
+        'model' => env('OPENROUTER_MODEL', 'openai/gpt-4o-mini'),
+        'app_url' => env('APP_URL'),
+        'app_name' => env('APP_NAME', 'Repono'),
+    ],
+
 ];

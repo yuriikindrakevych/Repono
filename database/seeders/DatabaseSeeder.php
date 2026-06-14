@@ -23,6 +23,12 @@ class DatabaseSeeder extends Seeder
     {
         $keys = app(LicenseKeyGenerator::class);
 
+        // Languages — English is the source; add the rest in the admin.
+        \App\Models\Language::insert([
+            ['code' => 'en', 'name' => 'English', 'native_name' => 'English', 'is_default' => true, 'enabled' => true, 'sort' => 0, 'created_at' => now(), 'updated_at' => now()],
+            ['code' => 'uk', 'name' => 'Ukrainian', 'native_name' => 'Українська', 'is_default' => false, 'enabled' => true, 'sort' => 1, 'created_at' => now(), 'updated_at' => now()],
+        ]);
+
         $admin = User::factory()->create([
             'name' => 'Repono Admin',
             'email' => 'admin@repono.test',

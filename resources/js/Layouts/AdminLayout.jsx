@@ -7,6 +7,7 @@ const NAV = [
     { label: 'Dashboard', route: 'admin.dashboard', match: '/admin' },
     { label: 'Products', route: 'admin.products.index', match: '/admin/products' },
     { label: 'Customers', route: 'admin.customers.index', match: '/admin/customers' },
+    { label: 'Languages', route: 'admin.languages.index', match: '/admin/languages' },
     { label: 'Audit log', route: 'admin.audit', match: '/admin/audit' },
 ];
 

@@ -31,12 +31,30 @@ class LegalController extends Controller
         ],
     ];
 
+    /**
+     * @return array<string, array{title: string, updated: string, body: array<int, string>}>
+     */
+    public static function docs(): array
+    {
+        return self::DOCS;
+    }
+
     public function show(string $doc): Response
     {
         if (! isset(self::DOCS[$doc])) {
             throw new NotFoundHttpException();
         }
 
-        return Inertia::render('Legal', ['doc' => self::DOCS[$doc]]);
+        $source = self::DOCS[$doc];
+
+        return Inertia::render('Legal', [
+            'doc' => [
+                'title' => \App\Models\Translation::content(app()->getLocale(), "legal:{$doc}:title") ?? $source['title'],
+                'updated' => $source['updated'],
+                'body' => collect($source['body'])
+                    ->map(fn ($para, $i) => \App\Models\Translation::content(app()->getLocale(), "legal:{$doc}:p{$i}") ?? $para)
+                    ->all(),
+            ],
+        ]);
     }
 }

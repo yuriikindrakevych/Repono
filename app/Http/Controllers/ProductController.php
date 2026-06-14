@@ -39,13 +39,13 @@ class ProductController extends Controller
 
         return Inertia::render('Products/Show', [
             'product' => [
-                'name' => $product->name,
+                'name' => $product->tr('name'),
                 'slug' => $product->slug,
                 'package' => 'repono/'.$product->slug,
                 'type' => $product->type->value,
                 'type_label' => $product->type->label(),
-                'tagline' => $product->tagline,
-                'description' => $product->description,
+                'tagline' => $product->tr('tagline'),
+                'description' => $product->tr('description'),
                 'compatibility' => $product->compatibility,
                 'latest_version' => $latest?->version,
                 'install_command' => $this->installCommand($product),
@@ -53,7 +53,7 @@ class ProductController extends Controller
             ],
             'plans' => $plans->map(fn ($plan, $i) => [
                 'id' => $plan->id,
-                'name' => $plan->name,
+                'name' => $plan->tr('name'),
                 'slug' => $plan->slug,
                 'activation_limit' => $plan->activation_limit,
                 'price_monthly' => $plan->price_monthly,

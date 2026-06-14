@@ -28,6 +28,13 @@ class AppServiceProvider extends ServiceProvider
                 default => new \App\Services\Payments\FakePaymentGateway(),
             };
         });
+
+        // Use OpenRouter when a key is configured; otherwise the offline stub.
+        $this->app->bind(\App\Services\Translation\Translator::class, function () {
+            return config('services.openrouter.key')
+                ? new \App\Services\Translation\OpenRouterTranslator(config('services.openrouter'))
+                : new \App\Services\Translation\FakeTranslator();
+        });
     }
 
     /**

@@ -124,5 +124,20 @@ Multi-currency & international fiscalization:
   USD/EUR/… → invoice (no ПРРО). Both stored as `receipts` with a `type`.
 - [x] Admin currency selector; dashboard MRR/revenue reported per currency.
 
-Remaining for production: real ПРРО (checkbox/ДПС) and a real invoice/VAT
-provider instead of the mocks; finalize legal copy; tests; deploy.
+Multilingual (i18n) + mass translation:
+
+- [x] DB-backed translations (`languages` + `translations`); locale via
+  `?lang=` + session; Inertia shares the active dictionary; React `t()` with
+  English fallback (partial wrapping never breaks the UI)
+- [x] Translatable DB content (products, plans, legal) via a `HasTranslations`
+  trait — `tr('field')` returns the active-locale value
+- [x] Mass translation through **OpenRouter** (`Translator` interface;
+  `FakeTranslator` until `OPENROUTER_API_KEY` is set) — batched, per language
+- [x] Admin “Languages & translations”: add any language, sync source strings,
+  auto-translate missing, per-language progress, inline string editor
+- [x] Language switcher in the storefront + cabinet headers
+- Run `php artisan translations:sync --translate` to (re)build + fill.
+
+Remaining for production: real ПРРО (checkbox/ДПС) and invoice/VAT providers;
+wrap the remaining admin/checkout UI strings (same `t()` pattern); queue the
+translate/email/receipt jobs; finalize legal copy; tests; deploy.
