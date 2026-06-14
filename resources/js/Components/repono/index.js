@@ -7,6 +7,7 @@ export { Terminal } from './Terminal';
 export { LicenseCard } from './LicenseCard';
 export { VersionTable } from './VersionTable';
 export { Tabs } from './Tabs';
+export { Checkbox } from './Checkbox';
 export { EmptyState } from './EmptyState';
 export { Alert } from './Alert';
 export { Toast } from './Toast';

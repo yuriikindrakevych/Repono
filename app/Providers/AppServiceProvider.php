@@ -15,7 +15,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        // Swap for a real ПРРО provider (checkbox / ДПС) via config when wired.
+        $this->app->bind(
+            \App\Services\Fiscal\FiscalProvider::class,
+            \App\Services\Fiscal\FakeFiscalProvider::class,
+        );
     }
 
     /**

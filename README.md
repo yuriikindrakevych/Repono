@@ -71,4 +71,8 @@ Stage 1 (MVP core) — in progress:
 - [x] Design system integrated (tokens + components) + landing with live catalog
 - [x] Product detail page with release history + per-domain pricing plans
 - [x] Customer cabinet (subscriptions, licenses, activations) with cancel & deactivate
-- [ ] Checkout + one-time payment + ПРРО fiscal receipt
+- [x] Checkout + one-time payment (mock gateway, HMAC callback, idempotent) + ПРРО fiscal receipt + license issuance
+
+**Stage 1 (MVP core) is functionally complete.** Next: swap mock payment/ПРРО
+providers for real WayForPay/Fondy + checkbox/ДПС, then Stage 2 (recurrent
+billing, dunning) and Stage 3 (Satis/WP update repositories).

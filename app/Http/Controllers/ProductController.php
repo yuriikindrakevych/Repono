@@ -52,6 +52,7 @@ class ProductController extends Controller
                 'currency' => $plans->first()?->currency ?? 'UAH',
             ],
             'plans' => $plans->map(fn ($plan, $i) => [
+                'id' => $plan->id,
                 'name' => $plan->name,
                 'slug' => $plan->slug,
                 'activation_limit' => $plan->activation_limit,

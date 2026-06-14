@@ -59,7 +59,7 @@ function PlanCard({ plan, period }) {
                     color: 'var(--ochre-700)', background: 'var(--ochre-100)', border: '1px solid var(--ochre-200)',
                     borderRadius: 'var(--radius-xs)', padding: '3px 7px' }}>{domains}</span>
             </div>
-            <Link href={route('register')}>
+            <Link href={route('checkout.show', { plan: plan.id, period })}>
                 <Button variant={featured ? 'primary' : 'secondary'} style={{ width: '100%' }}>
                     {featured ? 'Start free trial' : `Choose ${plan.name}`}
                 </Button>

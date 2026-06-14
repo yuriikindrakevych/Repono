@@ -74,14 +74,31 @@ class CabinetController extends Controller
                 ];
             });
 
+        $invoices = $user->orders()
+            ->where('status', \App\Enums\OrderStatus::Paid)
+            ->with(['plan.product', 'receipt'])
+            ->latest('paid_at')
+            ->get()
+            ->map(fn ($order) => [
+                'reference' => $order->gateway_reference,
+                'date' => $order->paid_at?->format('M j, Y'),
+                'description' => $order->plan->product->name.' · '.$order->plan->name,
+                'amount' => $order->amount,
+                'currency' => $order->currency,
+                'fiscal_number' => $order->receipt?->fiscal_number,
+                'receipt_url' => $order->receipt?->url,
+            ]);
+
         return Inertia::render('Cabinet', [
             'subscriptions' => $subscriptions,
             'licenses' => $licenses,
             'activations' => $activations,
+            'invoices' => $invoices,
             'counts' => [
                 'subscriptions' => $subscriptions->count(),
                 'licenses' => $licenses->count(),
                 'activations' => $activations->count(),
+                'invoices' => $invoices->count(),
             ],
         ]);
     }

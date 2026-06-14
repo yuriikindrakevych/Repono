@@ -10,6 +10,7 @@ import { LicenseCard } from '@/Components/repono/LicenseCard';
 import { EmptyState } from '@/Components/repono/EmptyState';
 import { Toast } from '@/Components/repono/Toast';
 import { AppHeader } from '@/Components/repono/Chrome';
+import { formatPrice } from '@/Components/repono/format';
 import * as I from '@/Components/repono/icons';
 
 const wrap = { maxWidth: 'var(--container-wide)', margin: '0 auto', padding: '0 24px' };
@@ -59,7 +60,7 @@ function SubRow({ sub }) {
     );
 }
 
-export default function Cabinet({ subscriptions = [], licenses = [], activations = [], counts = {} }) {
+export default function Cabinet({ subscriptions = [], licenses = [], activations = [], invoices = [], counts = {} }) {
     const { auth, flash } = usePage().props;
     const [tab, setTab] = React.useState('subs');
     const [toast, setToast] = React.useState(null);
@@ -78,7 +79,7 @@ export default function Cabinet({ subscriptions = [], licenses = [], activations
         { value: 'subs', label: 'Subscriptions', count: counts.subscriptions ?? subscriptions.length },
         { value: 'licenses', label: 'Licenses', count: counts.licenses ?? licenses.length },
         { value: 'activations', label: 'Activations', count: counts.activations ?? activations.length },
-        { value: 'invoices', label: 'Invoices' },
+        { value: 'invoices', label: 'Invoices', count: counts.invoices ?? invoices.length },
         { value: 'payment', label: 'Payment method' },
     ];
 
@@ -156,10 +157,38 @@ export default function Cabinet({ subscriptions = [], licenses = [], activations
         }
 
         if (tab === 'invoices') {
+            if (!invoices.length) {
+                return (
+                    <EmptyState icon={<I.Receipt />} title="No invoices yet">
+                        Every successful charge generates a fiscal receipt (ПРРО) you can open here. Nothing has been billed yet.
+                    </EmptyState>
+                );
+            }
             return (
-                <EmptyState icon={<I.Receipt />} title="No invoices yet">
-                    Every successful charge generates a fiscal receipt (ПРРО) you can download here. Nothing has been billed yet.
-                </EmptyState>
+                <Card flushBody>
+                    <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                        <thead><tr>
+                            <Th>Invoice</Th><Th>Date</Th><Th>Description</Th><Th>Amount</Th><Th style={{ textAlign: 'right' }}>·</Th>
+                        </tr></thead>
+                        <tbody>
+                            {invoices.map((v) => (
+                                <tr key={v.reference}>
+                                    <Td><span style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-strong)' }}>{v.reference}</span></Td>
+                                    <Td><span style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-muted)' }}>{v.date}</span></Td>
+                                    <Td>{v.description}</Td>
+                                    <Td><span style={{ fontFamily: 'var(--font-mono)' }}>{formatPrice(v.amount, v.currency)} {v.currency}</span></Td>
+                                    <Td style={{ textAlign: 'right' }}>
+                                        {v.receipt_url ? (
+                                            <a href={v.receipt_url} target="_blank" rel="noreferrer">
+                                                <Button variant="ghost" size="sm" iconLeft={<I.Receipt />}>Receipt</Button>
+                                            </a>
+                                        ) : null}
+                                    </Td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </Card>
             );
         }
 
