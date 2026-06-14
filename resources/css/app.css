@@ -69,7 +69,8 @@
 
 /* Landing responsive: editorial two-column splits collapse on small screens. */
 @media (max-width: 920px) {
-    .rep-hero, .rep-how { grid-template-columns: 1fr !important; }
+    .rep-hero, .rep-how, .rep-product-grid, .rep-plans { grid-template-columns: 1fr !important; }
+    .rep-product-aside { position: static !important; }
     .rep-navlinks { display: none !important; }
     .rep-foot-grid { grid-template-columns: 1fr 1fr !important; }
 }

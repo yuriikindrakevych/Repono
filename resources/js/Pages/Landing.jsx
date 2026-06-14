@@ -7,16 +7,10 @@ import { Terminal } from '@/Components/repono/Terminal';
 import { LicenseCard } from '@/Components/repono/LicenseCard';
 import { VersionTable } from '@/Components/repono/VersionTable';
 import { MarketingHeader, Footer } from '@/Components/repono/Chrome';
+import { formatPrice } from '@/Components/repono/format';
 import * as I from '@/Components/repono/icons';
 
 const wrap = { maxWidth: 'var(--container-max)', margin: '0 auto', padding: '0 24px' };
-
-function formatPrice(kopiykas, currency = 'UAH') {
-    if (kopiykas == null) return null;
-    const symbol = currency === 'UAH' ? '₴' : '';
-    const amount = Math.round(kopiykas / 100).toLocaleString('uk-UA');
-    return `${symbol}${amount}`;
-}
 
 function StepRow({ n, icon, title, children }) {
     return (
@@ -50,7 +44,11 @@ function ProductCard({ product }) {
                     : null}
             </div>
             <div style={{ padding: '10px 20px 16px', display: 'grid', gap: 10, alignContent: 'start' }}>
-                <h3 style={{ fontSize: 'var(--fs-title)', margin: 0 }}>{product.name}</h3>
+                <h3 style={{ fontSize: 'var(--fs-title)', margin: 0 }}>
+                    <Link href={route('products.show', product.slug)} style={{ color: 'var(--text-strong)' }}>
+                        {product.name}
+                    </Link>
+                </h3>
                 <p style={{ color: 'var(--text-muted)', fontSize: 'var(--fs-body-sm)', margin: 0 }}>{product.tagline}</p>
                 <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginTop: 4 }}>
                     {cms.map((c) => <Tag key={c} mono>{c}</Tag>)}
@@ -62,8 +60,8 @@ function ProductCard({ product }) {
                 <span style={{ fontFamily: 'var(--font-mono)', fontSize: 'var(--fs-mono-sm)', color: 'var(--text-body)' }}>
                     {price ? <>from <b style={{ color: 'var(--text-strong)' }}>{price}</b>/mo</> : 'Contact us'}
                 </span>
-                <Link href={route('register')}>
-                    <Button size="sm" variant="secondary" iconRight={<I.ArrowRight />}>Get started</Button>
+                <Link href={route('products.show', product.slug)}>
+                    <Button size="sm" variant="secondary" iconRight={<I.ArrowRight />}>View plans</Button>
                 </Link>
             </div>
         </div>

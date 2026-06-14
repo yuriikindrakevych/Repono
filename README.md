@@ -69,6 +69,6 @@ Stage 1 (MVP core) — in progress:
 - [x] Domain schema: products, plans, releases, subscriptions, licenses, activations
 - [x] License verification endpoint + activation tracking + rate limiting
 - [x] Design system integrated (tokens + components) + landing with live catalog
-- [ ] Product pages & pricing
+- [x] Product detail page with release history + per-domain pricing plans
 - [ ] Checkout + one-time payment + ПРРО fiscal receipt
 - [ ] Customer cabinet

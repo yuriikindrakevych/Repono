@@ -1,11 +1,13 @@
 <?php
 
 use App\Http\Controllers\LandingController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', LandingController::class)->name('home');
+Route::get('/products/{product}', [ProductController::class, 'show'])->name('products.show');
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
