@@ -60,6 +60,42 @@ function SubRow({ sub }) {
     );
 }
 
+function SetupBlock({ setup, licenseKey, onCopy }) {
+    if (!setup) return null;
+    const isComposer = setup.type === 'drupal' || setup.type === 'app';
+    const lines = isComposer
+        ? [
+            `composer config repositories.repono composer ${setup.repo_url}`,
+            `composer config --auth http-basic.${setup.host} token ${setup.token}`,
+            `composer require ${setup.package}`,
+        ]
+        : [
+            '# WordPress — paste this key in the plugin settings',
+            `license_key = ${licenseKey}`,
+        ];
+    const snippet = lines.join('\n');
+
+    return (
+        <div style={{ display: 'grid', gap: 8 }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <span className="r-eyebrow">{isComposer ? 'Connect via Composer' : 'Connect plugin'}</span>
+                <Button size="sm" variant="ghost" onClick={() => {
+                    navigator.clipboard?.writeText(snippet);
+                    onCopy({ tone: 'success', msg: 'Setup copied' });
+                }}>Copy</Button>
+            </div>
+            <pre style={{ margin: 0, background: 'var(--surface-terminal)', color: '#C7D0DA',
+                borderRadius: 'var(--radius-md)', padding: '14px 16px', fontFamily: 'var(--font-mono)',
+                fontSize: 'var(--fs-mono-sm)', lineHeight: 'var(--lh-mono)', overflowX: 'auto', whiteSpace: 'pre' }}>{snippet}</pre>
+            <span style={{ fontSize: 'var(--fs-caption)', color: 'var(--text-subtle)' }}>
+                {isComposer
+                    ? 'Run these once; composer update then keeps the module current behind your license.'
+                    : 'Updates arrive automatically while the license is active.'}
+            </span>
+        </div>
+    );
+}
+
 export default function Cabinet({ subscriptions = [], licenses = [], activations = [], invoices = [], counts = {} }) {
     const { auth, flash } = usePage().props;
     const [tab, setTab] = React.useState('subs');
@@ -111,14 +147,18 @@ export default function Cabinet({ subscriptions = [], licenses = [], activations
                 );
             }
             return (
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', gap: 18 }}>
+                <div style={{ display: 'grid', gap: 18 }}>
                     {licenses.map((l) => (
-                        <LicenseCard key={l.key} product={l.product} plan={l.plan} version={l.version}
-                            licenseKey={l.key} status={l.status} heartbeatMeta={l.heartbeat_meta} meta={l.meta}
-                            onCopy={(k) => {
-                                navigator.clipboard?.writeText(k);
-                                fireToast({ tone: 'success', msg: 'License key copied' });
-                            }} />
+                        <div key={l.key} style={{ display: 'grid', gridTemplateColumns: 'minmax(320px, 380px) 1fr', gap: 18,
+                            alignItems: 'start' }} className="rep-product-grid">
+                            <LicenseCard product={l.product} plan={l.plan} version={l.version}
+                                licenseKey={l.key} status={l.status} heartbeatMeta={l.heartbeat_meta} meta={l.meta}
+                                onCopy={(k) => {
+                                    navigator.clipboard?.writeText(k);
+                                    fireToast({ tone: 'success', msg: 'License key copied' });
+                                }} />
+                            <SetupBlock setup={l.setup} licenseKey={l.key} onCopy={fireToast} />
+                        </div>
                     ))}
                 </div>
             );

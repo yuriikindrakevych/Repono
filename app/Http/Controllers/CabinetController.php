@@ -52,6 +52,13 @@ class CabinetController extends Controller
                     'heartbeat_meta' => $recent
                         ? $this->heartbeat($recent)['meta']
                         : 'no activations yet',
+                    'setup' => [
+                        'type' => $license->product->type->value,
+                        'package' => 'repono/'.$license->product->slug,
+                        'repo_url' => rtrim((string) config('app.url'), '/').'/repo',
+                        'host' => parse_url((string) config('app.url'), PHP_URL_HOST),
+                        'token' => $license->repo_token,
+                    ],
                 ];
             });
 

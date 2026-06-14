@@ -97,13 +97,16 @@ class DatabaseSeeder extends Seeder
             }
 
             foreach ($row['releases'] as $i => $release) {
-                $product->releases()->create([
+                $rel = $product->releases()->create([
                     'version' => $release['version'],
                     'channel' => ReleaseChannel::Stable,
                     'changelog' => $release['changelog'],
                     'is_published' => true,
                     'released_at' => Carbon::now()->subDays((count($row['releases']) - $i) * 21),
                 ]);
+
+                [$path, $sha, $size] = $this->makeArtifact($product, $rel);
+                $rel->update(['artifact_path' => $path, 'checksum' => $sha, 'artifact_size' => $size]);
             }
 
             // Give the demo customer a live license for the first product's mid plan.
@@ -150,4 +153,35 @@ class DatabaseSeeder extends Seeder
             $this->command?->info("Demo license key: {$firstLicense->key}");
         }
     }
+
+    /**
+     * Build a small but real .zip artifact for a release so the update
+     * repository and signed downloads work end-to-end in development.
+     *
+     * @return array{0: string, 1: string, 2: int}
+     */
+    private function makeArtifact(Product $product, $release): array
+    {
+        $relPath = 'artifacts/'.$product->slug.'/'.$release->version.'.zip';
+        $full = \Illuminate\Support\Facades\Storage::disk('local')->path($relPath);
+        $dir = dirname($full);
+        if (! is_dir($dir)) {
+            mkdir($dir, 0755, true);
+        }
+
+        $zip = new \ZipArchive();
+        $zip->open($full, \ZipArchive::CREATE | \ZipArchive::OVERWRITE);
+        $zip->addFromString(
+            $product->slug.'/composer.json',
+            json_encode(['name' => 'repono/'.$product->slug, 'version' => $release->version], JSON_PRETTY_PRINT)
+        );
+        $zip->addFromString(
+            $product->slug.'/README.md',
+            "# {$product->name} v{$release->version}\n\n{$release->changelog}\n"
+        );
+        $zip->close();
+
+        return [$relPath, hash_file('sha256', $full), filesize($full)];
+    }
 }
+

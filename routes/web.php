@@ -8,11 +8,18 @@ use App\Http\Controllers\MockGatewayController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReceiptController;
+use App\Http\Controllers\Updates\ArtifactController;
+use App\Http\Controllers\Updates\ComposerRepositoryController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', LandingController::class)->name('home');
 Route::get('/products/{product}', [ProductController::class, 'show'])->name('products.show');
 Route::get('/legal/{doc}', [LegalController::class, 'show'])->name('legal');
+
+// Private Composer repository for Drupal (http-basic token) + signed artifacts.
+Route::get('/repo/packages.json', [ComposerRepositoryController::class, 'packages'])->name('repo.packages');
+Route::get('/repo/dist/{release}/{license:id}', [ArtifactController::class, 'download'])
+    ->middleware('signed')->withoutScopedBindings()->name('repo.dist');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/cabinet', [CabinetController::class, 'index'])->name('cabinet');

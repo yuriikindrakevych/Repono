@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\LicenseVerifyController;
+use App\Http\Controllers\Updates\WpUpdateController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,3 +16,8 @@ Route::prefix('v1')->group(function () {
         ->middleware('throttle:license-verify')
         ->name('api.license.verify');
 });
+
+// WordPress update endpoint (plugin-update-checker) — ТЗ §5.9.
+Route::get('wp/update', WpUpdateController::class)
+    ->middleware('throttle:license-verify')
+    ->name('api.wp.update');

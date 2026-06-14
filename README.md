@@ -85,5 +85,15 @@ Stage 2 (recurrent billing):
   reflected by the verify endpoint
 - [x] Email notifications (payment succeeded / failed / suspended) via Mailpit
 
-Next: swap mock payment/ПРРО for real WayForPay/Fondy + checkbox/ДПС; Stage 3
-(Satis/WP update repositories with token revocation).
+Stage 3 (update repositories):
+
+- [x] Private Composer repository for Drupal (http-basic per-license token,
+  `packages.json` with signed dist URLs + shasum)
+- [x] WordPress update endpoint (`/api/wp/update`, plugin-update-checker)
+- [x] Expiring signed download URLs; entitlement re-checked at download
+- [x] Token revocation: suspended/canceled licenses stop serving updates
+- [x] Auto-generated connection instructions (repo URL + require + token) in
+  the cabinet
+
+Next: swap the mock payment/ПРРО/gateway providers for real WayForPay/Fondy +
+checkbox/ДПС (all behind interfaces); admin UI for releases & audit log.

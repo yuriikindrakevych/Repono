@@ -25,3 +25,4 @@ yarn-error.log
 # Project-specific
 .idea/
 Docs/
+/storage/app/private/artifacts
