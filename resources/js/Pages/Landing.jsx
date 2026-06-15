@@ -13,10 +13,10 @@ import * as I from '@/Components/repono/icons';
 
 const wrap = { maxWidth: 'var(--container-max)', margin: '0 auto', padding: '0 24px' };
 
-// Renders a translated sentence with an inline code term, kept as one
-// translatable unit (so grammar stays correct) via a :cmd placeholder.
-function withCode(key, code) {
-    return t(key).split(':cmd').map((part, i) => (
+// Renders an already-translated sentence with an inline code term in place of
+// its :cmd placeholder. Pass t('…') in so the key is visible to extraction.
+function withCode(translated, code) {
+    return translated.split(':cmd').map((part, i) => (
         <React.Fragment key={i}>
             {i > 0 ? <span className="r-mono" style={{ color: 'var(--text-body)' }}>{code}</span> : null}
             {part}
@@ -97,7 +97,7 @@ export default function Landing({ products = [], releases = [], stats = {}, auth
                         </h1>
                         <p style={{ fontSize: 'var(--fs-body-lg)', color: 'var(--text-muted)', maxWidth: '46ch' }}>
                             {t('Repono is the registry for the Drupal modules, WordPress plugins and apps you build.')}{' '}
-                            {withCode('Buyers run one :cmd and stay current automatically — on your release schedule, behind your license keys.', 'composer require')}
+                            {withCode(t('Buyers run one :cmd and stay current automatically — on your release schedule, behind your license keys.'), 'composer require')}
                         </p>
                         <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginTop: 4 }}>
                             <Link href={route('register')}>
