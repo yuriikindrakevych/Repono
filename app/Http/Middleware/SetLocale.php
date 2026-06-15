@@ -14,12 +14,15 @@ class SetLocale
     {
         $enabled = Language::where('enabled', true)->pluck('code')->all();
 
-        // ?lang= switches and persists the choice.
+        // The admin area keeps its own locale, independent of the storefront.
+        $sessionKey = $request->is('admin', 'admin/*') ? 'admin_locale' : 'locale';
+
+        // ?lang= switches and persists the choice for the current area.
         if (($pick = $request->query('lang')) && in_array($pick, $enabled, true)) {
-            $request->session()->put('locale', $pick);
+            $request->session()->put($sessionKey, $pick);
         }
 
-        $locale = $request->session()->get('locale');
+        $locale = $request->session()->get($sessionKey);
         if (! in_array($locale, $enabled, true)) {
             $locale = Language::defaultCode();
         }

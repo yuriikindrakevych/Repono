@@ -75,7 +75,7 @@ export default function AdminLayout({ title, actions, children }) {
                         <LanguageSwitcher compact />
                     </div>
                 </header>
-                <div style={{ padding: 28, maxWidth: 1200 }}>{children}</div>
+                <div style={{ padding: 28 }}>{children}</div>
             </main>
 
             {toast ? (
