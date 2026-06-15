@@ -1,16 +1,32 @@
 import React from 'react';
 import { usePage } from '@inertiajs/react';
 
-/* Switches locale via ?lang= (the SetLocale middleware persists it in session
-   and a full reload refreshes both the UI dictionary and translated content). */
+/* On the storefront the locale lives in the URL path (/uk/...) — the default
+   language has no prefix. Everywhere else (cabinet, admin) we fall back to
+   ?lang=, which the SetLocale middleware persists in the session. A full reload
+   refreshes both the UI dictionary and the translated content. */
 export function LanguageSwitcher({ compact = false }) {
     const { i18n } = usePage().props;
     const locales = i18n?.locales ?? [];
     if (locales.length <= 1) return null;
 
     const onChange = (e) => {
+        const code = e.target.value;
+
+        if (i18n.path_localized) {
+            const known = locales.map((l) => l.code);
+            const segments = window.location.pathname.split('/').filter(Boolean);
+            // Drop any existing locale prefix.
+            if (segments.length && known.includes(segments[0])) segments.shift();
+            const rest = segments.join('/');
+            const prefix = code === i18n.default ? '' : `/${code}`;
+            const path = rest ? `${prefix}/${rest}` : (prefix || '/');
+            window.location.href = path + window.location.search + window.location.hash;
+            return;
+        }
+
         const url = new URL(window.location.href);
-        url.searchParams.set('lang', e.target.value);
+        url.searchParams.set('lang', code);
         window.location.href = url.toString();
     };
 

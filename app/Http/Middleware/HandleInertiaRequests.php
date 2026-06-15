@@ -42,6 +42,14 @@ class HandleInertiaRequests extends Middleware
             ],
             'i18n' => [
                 'locale' => App::getLocale(),
+                'default' => Language::defaultCode(),
+                // The storefront carries the locale in the URL path (/uk/...);
+                // elsewhere the switcher falls back to ?lang=.
+                'path_localized' => in_array(
+                    $request->route()?->getName(),
+                    ['home', 'products.show', 'legal'],
+                    true,
+                ),
                 // Source language needs no dictionary — t() returns the key itself.
                 'messages' => fn () => App::getLocale() === Language::defaultCode()
                     ? (object) []

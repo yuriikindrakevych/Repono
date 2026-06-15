@@ -14,9 +14,28 @@ use App\Http\Controllers\Updates\ArtifactController;
 use App\Http\Controllers\Updates\ComposerRepositoryController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', LandingController::class)->name('home');
-Route::get('/products/{product}', [ProductController::class, 'show'])->name('products.show');
-Route::get('/legal/{doc}', [LegalController::class, 'show'])->name('legal');
+/*
+ * Public storefront — locale lives in the URL path: the default language has no
+ * prefix (repono.dev), every other enabled language is served under /{locale}
+ * (repono.dev/uk). The prefix is an optional route parameter constrained to the
+ * enabled non-default codes, so /up, /repo, slugs, etc. never match it.
+ */
+$localePattern = 'x-none';
+try {
+    $localeCodes = \App\Models\Language::query()->where('enabled', true)
+        ->where('is_default', false)->pluck('code')->all();
+    if ($localeCodes) {
+        $localePattern = implode('|', array_map(static fn ($c) => preg_quote($c, '/'), $localeCodes));
+    }
+} catch (\Throwable) {
+    // languages table not migrated yet (fresh install) — fall through to no-match.
+}
+
+Route::group(['prefix' => '{locale?}', 'where' => ['locale' => $localePattern]], function () {
+    Route::get('/', LandingController::class)->name('home');
+    Route::get('products/{product}', [ProductController::class, 'show'])->name('products.show');
+    Route::get('legal/{doc}', [LegalController::class, 'show'])->name('legal');
+});
 
 // Payment gateway server callback (signature-verified, CSRF-exempt).
 Route::post('/webhooks/payment', PaymentWebhookController::class)->name('webhooks.payment');
