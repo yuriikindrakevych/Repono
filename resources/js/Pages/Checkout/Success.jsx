@@ -55,7 +55,9 @@ export default function Success({ order }) {
                         <span style={{ fontFamily: 'var(--font-mono)', fontSize: 'var(--fs-mono-lg)',
                             letterSpacing: '0.04em', color: 'var(--text-strong)' }}>{order.license_key}</span>
                         <span style={{ fontSize: 'var(--fs-caption)', color: 'var(--text-subtle)' }}>
-                            {t('Use it in')} <span className="r-mono">composer require</span> {t('or paste it in the plugin settings.')}
+                            {t('Use it in :cmd or paste it in the plugin settings.').split(':cmd').map((part, i) => (
+                                <React.Fragment key={i}>{i > 0 ? <span className="r-mono">composer require</span> : null}{part}</React.Fragment>
+                            ))}
                         </span>
                     </div>
                 </Card>
