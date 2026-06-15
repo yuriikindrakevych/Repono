@@ -57,6 +57,7 @@ export default function AdminLayout({ title, actions, children }) {
                     <span style={{ fontSize: 'var(--fs-caption)', color: 'var(--text-muted)' }}>{auth?.user?.email}</span>
                     <div style={{ display: 'flex', gap: 14 }}>
                         <Link href={route('home')} style={{ fontSize: 'var(--fs-caption)', color: 'var(--text-muted)' }}>{t('Storefront')}</Link>
+                        <Link href={route('profile.edit')} style={{ fontSize: 'var(--fs-caption)', color: 'var(--text-muted)' }}>{t('Settings')}</Link>
                         <Link href={route('logout')} method="post" as="button" style={{ background: 'none', border: 'none',
                             cursor: 'pointer', font: 'inherit', fontSize: 'var(--fs-caption)', color: 'var(--text-muted)' }}>{t('Sign out')}</Link>
                     </div>
