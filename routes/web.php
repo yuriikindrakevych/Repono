@@ -64,6 +64,9 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
     Route::get('translations', [Admin\TranslationController::class, 'index'])->name('translations.index');
     Route::put('translations', [Admin\TranslationController::class, 'update'])->name('translations.update');
 
+    Route::get('settings', [Admin\SettingsController::class, 'index'])->name('settings.index');
+    Route::put('settings', [Admin\SettingsController::class, 'update'])->name('settings.update');
+
     Route::get('products', [Admin\ProductController::class, 'index'])->name('products.index');
     Route::post('products', [Admin\ProductController::class, 'store'])->name('products.store');
     Route::get('products/{product}/edit', [Admin\ProductController::class, 'edit'])->name('products.edit');

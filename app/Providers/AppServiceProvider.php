@@ -29,10 +29,19 @@ class AppServiceProvider extends ServiceProvider
             };
         });
 
-        // Use OpenRouter when a key is configured; otherwise the offline stub.
+        // Use OpenRouter when a key is configured (admin Settings overrides env);
+        // otherwise the offline stub.
         $this->app->bind(\App\Services\Translation\Translator::class, function () {
-            return config('services.openrouter.key')
-                ? new \App\Services\Translation\OpenRouterTranslator(config('services.openrouter'))
+            $config = config('services.openrouter');
+            try {
+                $config['key'] = \App\Models\Setting::get('openrouter_api_key', $config['key']);
+                $config['model'] = \App\Models\Setting::get('openrouter_model', $config['model']);
+            } catch (\Throwable) {
+                // settings table not migrated yet — fall back to env/config
+            }
+
+            return $config['key']
+                ? new \App\Services\Translation\OpenRouterTranslator($config)
                 : new \App\Services\Translation\FakeTranslator();
         });
     }
