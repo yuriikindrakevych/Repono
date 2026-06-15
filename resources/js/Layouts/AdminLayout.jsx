@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, usePage } from '@inertiajs/react';
 import { Logo } from '@/Components/repono/Chrome';
 import { Toast } from '@/Components/repono/Toast';
+import { LanguageSwitcher } from '@/Components/repono/LanguageSwitcher';
 import { t } from '@/i18n';
 
 const NAV = [
@@ -69,7 +70,10 @@ export default function AdminLayout({ title, actions, children }) {
                 <header style={{ height: 64, borderBottom: '1px solid var(--border-default)', background: 'var(--surface-page)',
                     display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 28px', position: 'sticky', top: 0, zIndex: 10 }}>
                     <h1 style={{ fontSize: 'var(--fs-display-sm)' }}>{t(title)}</h1>
-                    <div>{actions}</div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                        {actions}
+                        <LanguageSwitcher compact />
+                    </div>
                 </header>
                 <div style={{ padding: 28, maxWidth: 1200 }}>{children}</div>
             </main>
