@@ -101,17 +101,19 @@ class LanguageController extends Controller
     public function translate(Request $request, TranslationManager $manager): RedirectResponse
     {
         $code = $request->input('code');
+        $force = $request->boolean('force'); // re-translate existing (keeps human edits)
+        $verb = $force ? 'Re-translated' : 'Translated';
 
         if ($code) {
-            $n = $manager->translateMissing($code);
-            AuditLog::record('i18n', 'translations.translated', "Translated {$n} strings to {$code}");
+            $n = $manager->translateMissing($code, $force);
+            AuditLog::record('i18n', 'translations.translated', "{$verb} {$n} strings to {$code}");
 
-            return back()->with('flash', "Translated {$n} strings to {$code}.");
+            return back()->with('flash', "{$verb} {$n} strings to {$code}.");
         }
 
-        $total = array_sum($manager->translateAll());
-        AuditLog::record('i18n', 'translations.translated', "Auto-translated {$total} strings across all languages");
+        $total = array_sum($manager->translateAll($force));
+        AuditLog::record('i18n', 'translations.translated', "{$verb} {$total} strings across all languages");
 
-        return back()->with('flash', "Auto-translated {$total} missing strings.");
+        return back()->with('flash', "{$verb} {$total} strings.");
     }
 }

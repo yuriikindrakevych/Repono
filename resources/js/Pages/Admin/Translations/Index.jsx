@@ -52,6 +52,7 @@ export default function Index({ languages, driver }) {
                             {! l.is_default ? (
                                 <>
                                     <Button size="sm" variant="secondary" onClick={() => post(route('admin.languages.translate'), { code: l.code })}>{t('Translate')}</Button>
+                                    <Button size="sm" variant="ghost" onClick={() => { if (confirm(t('Re-translate all machine translations for this language? Your manual edits are kept.'))) post(route('admin.languages.translate'), { code: l.code, force: true }); }}>{t('Re-translate')}</Button>
                                     <Link href={route('admin.translations.index', { locale: l.code })}><Button size="sm" variant="ghost">{t('Edit')}</Button></Link>
                                     <Button size="sm" variant="ghost" onClick={() => post(route('admin.languages.update', l.id) /* toggle */, { enabled: ! l.enabled })}>{l.enabled ? t('Disable') : t('Enable')}</Button>
                                     <Button size="sm" variant="ghost" onClick={() => { if (confirm(`Remove ${l.native_name}? Its translations are deleted.`)) router.delete(route('admin.languages.destroy', l.id), { preserveScroll: true }); }}>✕</Button>

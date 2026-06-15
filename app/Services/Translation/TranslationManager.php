@@ -44,10 +44,11 @@ class TranslationManager
     }
 
     /**
-     * Translate every source string missing in the given locale. Returns the
-     * number of strings translated.
+     * Translate source strings into the given locale. By default only missing
+     * (and machine-translated, non-reviewed) strings are filled; with $force,
+     * every string is re-translated except ones a human has reviewed/edited.
      */
-    public function translateMissing(string $locale): int
+    public function translateMissing(string $locale, bool $force = false): int
     {
         $lang = Language::where('code', $locale)->first();
         if (! $lang || $locale === Language::defaultCode()) {
@@ -57,21 +58,28 @@ class TranslationManager
         $default = Language::defaultCode();
         $sources = Translation::where('locale', $default)->whereNotNull('value')->where('value', '!=', '')->get();
 
-        $existing = Translation::where('locale', $locale)->whereNotNull('value')->where('value', '!=', '')
+        // Never overwrite human-reviewed/edited translations, even on re-translate.
+        $existing = Translation::where('locale', $locale)
             ->get()->keyBy(fn ($t) => $t->group.'|'.$t->key_hash);
 
-        $todo = $sources->reject(fn ($s) => $existing->has($s->group.'|'.$s->key_hash));
+        $todo = $sources->reject(function ($s) use ($existing, $force) {
+            $current = $existing->get($s->group.'|'.$s->key_hash);
+            if ($current && $current->reviewed) {
+                return true; // keep human edits
+            }
+
+            return $force ? false : ($current && $current->value !== null && $current->value !== '');
+        });
 
         $count = 0;
         foreach ($todo->groupBy('group') as $group => $rows) {
-            $context = $group === 'ui' ? 'UI strings for a software licensing platform' : 'product & legal content';
-            foreach ($rows->chunk(40) as $chunk) {
+            $context = $group === 'ui'
+                ? 'short interface labels, buttons and messages'
+                : 'product descriptions and legal/marketing copy (full sentences)';
+            // Smaller batches reduce the chance of a truncated response.
+            foreach ($rows->chunk(20) as $chunk) {
                 $chunk = $chunk->values();
-                $translated = $this->translator->translate(
-                    $chunk->pluck('value')->all(),
-                    $lang->native_name,
-                    $context,
-                );
+                $translated = $this->safeTranslate($chunk->pluck('value')->all(), $lang->native_name, $context);
                 foreach ($chunk as $i => $src) {
                     Translation::put($locale, $group, $src->key, $translated[$i] ?? $src->value, false);
                     $count++;
@@ -83,15 +91,45 @@ class TranslationManager
     }
 
     /**
-     * Translate missing strings for every enabled non-default language.
+     * Translate a batch resiliently: on any failure (e.g. a truncated response
+     * or a length mismatch) split the batch in half and retry, down to single
+     * strings — a single un-translatable string falls back to its source so the
+     * run never aborts.
+     *
+     * @param  array<int, string>  $texts
+     * @return array<int, string>
+     */
+    private function safeTranslate(array $texts, string $languageName, ?string $context): array
+    {
+        if ($texts === []) {
+            return [];
+        }
+
+        try {
+            return $this->translator->translate($texts, $languageName, $context);
+        } catch (\Throwable $e) {
+            if (count($texts) === 1) {
+                return [$texts[0]]; // keep the source; don't lose the string
+            }
+            $half = intdiv(count($texts), 2);
+
+            return array_merge(
+                $this->safeTranslate(array_slice($texts, 0, $half), $languageName, $context),
+                $this->safeTranslate(array_slice($texts, $half), $languageName, $context),
+            );
+        }
+    }
+
+    /**
+     * Translate for every enabled non-default language.
      *
      * @return array<string, int>
      */
-    public function translateAll(): array
+    public function translateAll(bool $force = false): array
     {
         $result = [];
         foreach (Language::where('enabled', true)->where('is_default', false)->pluck('code') as $code) {
-            $result[$code] = $this->translateMissing($code);
+            $result[$code] = $this->translateMissing($code, $force);
         }
 
         return $result;
