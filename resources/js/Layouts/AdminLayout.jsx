@@ -41,7 +41,7 @@ export default function AdminLayout({ title, actions, children }) {
                         textTransform: 'uppercase', color: 'var(--text-subtle)', border: '1px solid var(--border-default)',
                         borderRadius: 'var(--radius-xs)', padding: '2px 6px' }}>admin</span>
                 </div>
-                <nav style={{ padding: 12, display: 'grid', gap: 2, flex: 1 }}>
+                <nav style={{ padding: 12, display: 'flex', flexDirection: 'column', gap: 2, flex: 1 }}>
                     {NAV.map((item) => {
                         const active = isActive(item);
                         return (
