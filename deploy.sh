@@ -9,6 +9,9 @@
 set -euo pipefail
 cd "$(dirname "$0")"
 
+# The web files are owned by www but deploy runs as root — allow git here.
+git config --global --add safe.directory "$(pwd)" 2>/dev/null || true
+
 # Use the aaPanel PHP build (override with PHP=… if needed).
 PHP="${PHP:-/www/server/php/84/bin/php}"
 COMPOSER="${COMPOSER:-/usr/local/bin/composer}"
