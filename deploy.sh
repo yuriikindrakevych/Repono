@@ -44,7 +44,8 @@ echo "→ Restart queue workers…"
 $PHP artisan queue:restart || true
 
 echo "→ Fixing ownership/permissions…"
-chown -R "$WEB_USER:$WEB_USER" .
+# (.user.ini is immutable on aaPanel — ignore that single failure)
+chown -R "$WEB_USER:$WEB_USER" . 2>/dev/null || true
 chmod -R ug+rwX storage bootstrap/cache
 
 echo "✓ Deployed $(git rev-parse --short HEAD)."
